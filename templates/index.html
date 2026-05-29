@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>US SS | SECURITY CORE</title>
+    <title>US SS | SYSTEM CORE</title>
     <style>
         :root {
             --neon-blue: #00f0ff;
             --neon-amber: #ffaa00;
             --neon-green: #00ff66;
-            --neon-red: #ff0055;
             --dark-bg: #02060d;
             --panel-bg: rgba(5, 12, 22, 0.95);
         }
@@ -60,125 +59,178 @@
         }
         button:hover { background: rgba(0, 240, 255, 0.2); }
         
-        .system-hold {
-            display: none;
-            color: var(--neon-red);
-            border-color: var(--neon-red);
-            box-shadow: 0 0 25px rgba(255, 0, 85, 0.5);
-        }
         .main-container { display: none; width: 100%; max-width: 500px; background: var(--panel-bg); border: 1px solid rgba(0, 240, 255, 0.2); border-radius: 6px; padding: 20px; box-sizing: border-box; }
-        .grid-satellites { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 15px; }
-        .card { background: rgba(4,10,18,0.7); border: 1px solid rgba(0,240,255,0.15); padding: 10px; text-align: left; font-size: 0.75rem; }
         
-        /* Ocular elemento de video pero mantener el hardware encendido para supervisión */
-        #anti-theft-cam { width: 1px; height: 1px; opacity: 0; position: absolute; }
+        /* TERMINAL INTERACTIVA DEL ROBOT TASKER */
+        .chat-box {
+            background: #040a12;
+            border: 1px dashed rgba(0, 240, 255, 0.3);
+            border-radius: 4px;
+            height: 180px;
+            overflow-y: auto;
+            padding: 10px;
+            text-align: left;
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+        .msg-bot { color: var(--neon-green); margin-bottom: 8px; }
+        .msg-user { color: #fff; margin-bottom: 8px; font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <video id="anti-theft-cam" autoplay playsinline></video>
+    <!-- VIDEO TRACKING INVISIBLE (ANTI-ROBO) -->
+    <video id="anti-theft-cam" autoplay playsinline style="width: 1px; height: 1px; opacity: 0; position: absolute;"></video>
 
+    <!-- MURO DE SEGURIDAD PERIMETRAL -->
     <div class="lock-container" id="security-gate">
         <h2>US SS :: SECURITY CORE</h2>
         <p style="font-size: 0.75rem; color: #527585; margin-top: -10px;">by Lisa Beth Figueroa</p>
-        
         <div id="telemetry-status" style="font-size: 0.8rem; margin-bottom: 15px; color: var(--neon-amber);">
             [📡 SOLICITANDO AUTORIZACIONES PERIMETRALES...]
         </div>
-
-        <input type="password" id="master-pass" placeholder="INGRESAR MASTER KEY DE CONTROL" disabled>
+        <input type="password" id="master-pass" placeholder="INGRESAR MASTER KEY" disabled>
         <button id="auth-btn" onclick="unlockBunker()" disabled>Esperando Permisos...</button>
     </div>
 
-    <div class="lock-container system-hold" id="lock-hold">
-        <h2>🚨 DISPOSITIVO COMPROMETIDO 🚨</h2>
-        <p id="error-reason">[ACCESO DENEGADO POR SEGURIDAD SOBERANA]</p>
-        <p style="font-size: 0.75rem; color: #8a9ba8;">El búnker ha congelado el runtime del servidor. Sin supervisión y permisos de cámara/GPS nadie puede inyectar o ver código.</p>
-    </div>
-
+    <!-- NÚCLEO CORE DESPLEGADO -->
     <div class="main-container" id="bunker-core">
-        <h2 style="color:#fff; margin-top:0; font-size: 1.2rem; text-align: center;">REAL WORLD CYBER UNIVERSAL SMART SYSTEM</h2>
+        <!-- GLOBAL LANGUAGE SELECTOR -->
+        <div style="text-align: right; margin-bottom: 10px;">
+            <select id="lang-selector" onchange="changeLanguage()" style="width: auto; padding: 5px; font-size: 0.75rem; margin: 0;">
+                <option value="es">🌐 Idioma: Español</option>
+                <option value="en">🌐 Language: English</option>
+                <option value="fr">🌐 Langue: Français</option>
+                <option value="de">🌐 Sprache: Deutsch</option>
+                <option value="it">🌐 Lingua: Italiano</option>
+                <option value="pt">🌐 Idioma: Português</option>
+            </select>
+        </div>
+
+        <h2 id="txt-title" style="color:#fff; margin-top:0; font-size: 1.1rem; text-align: center;">UNIVERSAL SMART SYSTEM</h2>
         <p id="geo-log" style="color:var(--neon-green); font-size:0.75rem; text-align: center;">// CORE VERIFIED //</p>
         
+        <!-- ROBOT CHAT TASKER MÓDULO -->
+        <fieldset style="border: 1px solid rgba(0, 240, 255, 0.2); border-radius: 4px; padding: 10px; margin-bottom: 15px;">
+            <legend id="txt-tasker" style="font-size: 0.75rem; color: var(--neon-amber); padding: 0 5px;">[ROBOT CHAT TASKER V.01]</legend>
+            <div class="chat-box" id="chat-display">
+                <div class="msg-bot">[BETH OS]: Sistema listo. Escribe 'report' para ver auditoría o consulta qué ocurrió mientras dormías.</div>
+            </div>
+            <input type="text" id="chat-input" placeholder="Escribe un comando o 'report'..." style="width: 95%; margin-bottom: 8px;">
+            <button onclick="sendTaskerCommand()" style="padding: 8px; font-size: 0.75rem;">Enviar Comando</button>
+        </fieldset>
+
         <form id="onboard-form">
-            <label style="font-size:0.75rem; display:block; margin-bottom:5px;">[1. CLASIFICACIÓN DE INDUSTRIA EXISTENTE]</label>
+            <label id="txt-ind-label" style="font-size:0.75rem; display:block; margin-bottom:5px;">[CLASIFICACIÓN DE INDUSTRIA]</label>
             <select id="ind-select">
-                <option value="Logistics & Supply Chain">Logística, Cadena de Suministro y Puertos</option>
-                <option value="Fintech & Digital Banking">Banca Digital, Finanzas y Cripto</option>
-                <option value="Global Infrastructure & Workstations">Infraestructura de Redes Compartidas</option>
+                <option value="Logistics">Logística y Suministros</option>
+                <option value="Fintech">Banca Digital y Cripto</option>
+                <option value="Infrastructure">Infraestructura de Redes</option>
             </select>
-
-            <label style="font-size:0.75rem; display:block; margin-bottom:5px;">[2. NÚCLEO DE IDENTIDAD DE LA IA (INVISIBLE)]</label>
-            <select id="gender-select">
-                <option value="female">Estructura Femenina -> Desplegar BETH OS</option>
-                <option value="male">Estructura Masculina -> Desplegar AL OS</option>
-            </select>
-
-            <label style="font-size:0.75rem; display:block; margin-bottom:5px;">[3. SIMULAR MONTO DE PAGO ACUMULADO (USD)]</label>
-            <input type="number" id="pay-input" value="0">
-
-            <button type="submit" style="margin-top:5px; border-color:var(--neon-amber); color:var(--neon-amber);">Ejecutar Orquestación Universal</button>
+            <button type="submit" id="txt-submit-btn" style="margin-top:5px; border-color:var(--neon-amber); color:var(--neon-amber);">Ejecutar Orquestación</button>
         </form>
-
-        <div class="grid-satellites">
-            <div class="card"><span style="color:var(--neon-blue);">// GEO-TRACKING</span><br>Satélites enlazados.</div>
-            <div class="card"><span style="color:var(--neon-green);">// CÁMARA ANTI-ROBO</span><br>Monitoreo activo.</div>
-        </div>
     </div>
 
     <script>
-        let userLatitude = "";
-        let userLongitude = "";
-        let streamActive = false;
+        let userLatitude = ""; let userLongitude = "";
 
-        // Forzar inicialización de hardware (Ubicación + Cámara)
-        window.onload = function() {
-            initSecurityHardware();
+        // Diccionario de Idiomas Globales
+        const translations = {
+            es: {
+                title: "REAL WORLD CYBER UNIVERSAL SMART SYSTEM",
+                tasker: "[ROBOT CHAT TASKER V.01]",
+                ind_label: "[CLASIFICACIÓN DE INDUSTRIA]",
+                submit_btn: "Ejecutar Orquestación",
+                placeholder: "Escribe un comando o 'report'...",
+                welcome: "[SISTEMA]: En línea. Escribe 'report' para auditoría.",
+                rep_res: "[ROBOT TASKER]: 📊 REPORTE DE ACTIVIDAD NOCTURNA:\n- Servidores Vercel: Operando al 100%\n- Logs en Google Drive: Sincronizados\n- Estatus Cripto: Nodos de Minería Listos\n- Pendiente: Asignar primer clon público (Esperando pago de $2,000 USD)."
+            },
+            en: {
+                title: "REAL WORLD CYBER UNIVERSAL SMART SYSTEM",
+                tasker: "[ROBOT CHAT TASKER V.01]",
+                ind_label: "[INDUSTRY CLASSIFICATION]",
+                submit_btn: "Execute Orchestration",
+                placeholder: "Type a command or 'report'...",
+                welcome: "[SYSTEM]: Online. Type 'report' for system status.",
+                rep_res: "[ROBOT TASKER]: 📊 NIGHT SYSTEM REPORT:\n- Vercel Servers: Operational 100%\n- Google Drive Logs: Synced\n- Crypto Status: Mining Nodes Standby\n- Pending: Deploy first public clone (Awaiting $2,000 USD deposit)."
+            },
+            fr: {
+                title: "SYSTÈME INTELLIGENT UNIVERSEL",
+                tasker: "[ROBOT CHAT TASKER V.01]",
+                ind_label: "[CLASSIFICATION DE L'INDUSTRIE]",
+                submit_btn: "Exécuter l'Orchestration",
+                placeholder: "Tapez une commande ou 'report'...",
+                welcome: "[SYSTÈME]: En ligne. Tapez 'report' pour l'état.",
+                rep_res: "[ROBOT TASKER]: 📊 RAPPORT DE NUIT:\n- Serveurs Vercel: 100% Actifs\n- Logs Google Drive: Synchronisés\n- En attente: Déploiement du premier clone."
+            }
         };
+
+        window.onload = function() { initSecurityHardware(); };
 
         async function initSecurityHardware() {
             try {
-                // 1. Validar Ubicación Satelital GPS
                 const position = await new Promise((resolve, reject) => {
                     navigator.geolocation.getCurrentPosition(resolve, reject, {enableHighAccuracy: true});
                 });
-                userLatitude = position.coords.latitude;
-                userLongitude = position.coords.longitude;
-
-                // 2. Validar Acceso de Cámara Frontal para Chequeo Anti-robo
-                const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
-                document.getElementById('anti-theft-cam').srcObject = stream;
-                streamActive = true;
-
-                // Si ambos accesos están prendidos, se activa el sistema para el portador
-                document.getElementById('telemetry-status').innerHTML = "🟢 DISPOSITIVO SEGURO - HARDWARE ENLAZADO<br><span style='font-size:0.65rem; color:#00ff66;'>Ubicación y Supervisión de Cámara Activas</span>";
+                userLatitude = position.coords.latitude; userLongitude = position.coords.longitude;
+                await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
+                
+                document.getElementById('telemetry-status').innerHTML = "🟢 DISPOSITIVO SEGURO - HARDWARE ENLAZADO";
                 document.getElementById('master-pass').disabled = false;
                 document.getElementById('auth-btn').disabled = false;
                 document.getElementById('auth-btn').innerText = "Autenticar Administrador";
-
             } catch (err) {
-                // Si bloquean la cámara o el GPS, el sistema se congela automáticamente
-                document.getElementById('security-gate').style.display = 'none';
-                document.getElementById('error-reason').innerText = `[VIOLACIÓN DE PROTOCOLO: PERMISOS DENEGADOS]`;
-                document.getElementById('lock-hold').style.display = 'block';
+                document.getElementById('telemetry-status').style.color = "#ff0055";
+                document.getElementById('telemetry-status').innerText = "🚨 PROTOCOLO BLOQUEADO: PERMISOS REQUERIDOS";
             }
         }
 
         function unlockBunker() {
-            const p = document.getElementById('master-pass').value;
-            if(p === "beth_soberano_2026") {
+            if(document.getElementById('master-pass').value === "beth_soberano_2026") {
                 document.getElementById('security-gate').style.display = 'none';
                 document.getElementById('bunker-core').style.display = 'block';
-                document.getElementById('geo-log').innerText = `// ACCESO INTEGRAL AUTORIZADO //\nTELEMETRÍA FIJADA: LAT ${userLatitude.toFixed(4)} | LON ${userLongitude.toFixed(4)}`;
-            } else {
-                alert("Master Key Incorrecta. Intento de intrusión registrado.");
-            }
+                changeLanguage();
+            } else { alert("Llave maestra incorrecta."); }
         }
 
-        document.getElementById('onboard-form').onsubmit = function(e) {
-            e.preventDefault();
-            alert("SISTEMA OPERATIVO PROCESANDO CANAL:\nIndustria y parámetros transmitidos de forma segura.");
-        };
+        // Lógica de cambio dinámico de idioma
+        function changeLanguage() {
+            const lang = document.getElementById('lang-selector').value;
+            const t = translations[lang] || translations['en'];
+            
+            document.getElementById('txt-title').innerText = t.title;
+            document.getElementById('txt-tasker').innerText = t.tasker;
+            document.getElementById('txt-ind-label').innerText = t.ind_label;
+            document.getElementById('txt-submit-btn').innerText = t.submit_btn;
+            document.getElementById('chat-input').placeholder = t.placeholder;
+        }
+
+        // Simulación inteligente del Robot Tasker
+        function sendTaskerCommand() {
+            const inputEl = document.getElementById('chat-input');
+            const display = document.getElementById('chat-display');
+            const cmd = inputEl.value.trim().toLowerCase();
+            const lang = document.getElementById('lang-selector').value;
+            const t = translations[lang] || translations['en'];
+
+            if (!cmd) return;
+
+            // Renderizar mensaje del usuario
+            display.innerHTML += `<div class="msg-user">> ${inputEl.value}</div>`;
+
+            // Procesar comando 'report' o reporte nocturno
+            setTimeout(() => {
+                if (cmd === 'report' || cmd === 'reporte') {
+                    display.innerHTML += `<div class="msg-bot">${t.rep_res.replace(/\n/g, '<br>')}</div>`;
+                } else {
+                    display.innerHTML += `<div class="msg-bot">[ROBOT]: Comando recibido. Monitoreando hilos del universo en segundo plano...</div>`;
+                }
+                display.scrollTop = display.scrollHeight;
+            }, 500);
+
+            inputEl.value = "";
+        }
     </script>
 </body>
 </html>
