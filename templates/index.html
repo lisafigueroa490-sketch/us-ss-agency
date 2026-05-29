@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>US SS | GLOBAL CORE GATE</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>US SS | CENTRAL CORE UNIFIED</title>
     <style>
         :root {
             --neon-blue: #00f0ff;
             --neon-amber: #ffaa00;
             --neon-green: #00ff66;
+            --neon-purple: #bd00ff;
             --dark-bg: #03070d;
             --panel-bg: rgba(6, 14, 26, 0.95);
         }
@@ -33,7 +33,7 @@
             padding: 25px;
             border-radius: 4px;
             text-align: center;
-            max-width: 440px;
+            max-width: 450px;
             width: 100%;
             box-sizing: border-box;
         }
@@ -59,103 +59,125 @@
             cursor: pointer;
             width: 100%;
             text-transform: uppercase;
+            margin-top: 5px;
         }
         button:hover { background: rgba(0, 240, 255, 0.25); }
-        .main-container { display: none; width: 100%; max-width: 800px; background: var(--panel-bg); border: 1px solid rgba(0, 240, 255, 0.15); border-radius: 6px; padding: 20px; box-sizing: border-box; }
+        
+        /* INTERFAZ DEL SERVIDOR CENTRAL DE CONTROL */
+        .main-container { display: none; width: 100%; max-width: 850px; background: var(--panel-bg); border: 1px solid rgba(0, 240, 255, 0.15); border-radius: 6px; padding: 20px; box-sizing: border-box; }
+        .grid-buttons { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 15px; }
+        @media(min-width: 600px) { .grid-buttons { grid-template-columns: repeat(3, 1fr); } }
+        
+        .btn-control { font-size: 0.75rem; font-weight: bold; }
+        .btn-purple { border-color: var(--neon-purple); color: #f3d1ff; }
+        .btn-purple:hover { background: rgba(189, 0, 255, 0.2); box-shadow: 0 0 10px rgba(189, 0, 255, 0.4); }
+        .btn-amber { border-color: var(--neon-amber); color: #ffe6b3; }
+        .btn-amber:hover { background: rgba(255, 170, 0, 0.2); box-shadow: 0 0 10px rgba(255, 170, 0, 0.4); }
+        
+        .ai-status-card { background: #060e1a; border: 1px dashed rgba(0, 240, 255, 0.2); padding: 12px; margin-top: 15px; border-radius: 4px; text-align: left; font-size: 0.8rem; }
         .divider { border-top: 1px dashed rgba(0,240,255,0.2); margin: 20px 0; padding-top: 15px; }
     </style>
 </head>
 <body>
 
-    <!-- PUERTA DE ENTRADA UNIVERSAL -->
+    <!-- COMPUERTA GLOBAL DE ACCESO (GATE) -->
     <div class="lock-container" id="security-gate">
-        <!-- BOTÓN DE IDIOMAS UBICADO EN LA PARTE SUPERIOR DE LA COMPUERTA -->
         <div style="text-align: right; margin-bottom: 10px;">
-            <select id="gate-lang" onchange="switchGateLang()" style="width: auto; padding: 3px; font-size: 0.7rem; margin: 0;">
+            <select id="gate-lang" onchange="switchLang()" style="width: auto; padding: 3px; font-size: 0.7rem; margin: 0;">
                 <option value="es">🌐 Idioma: Español</option>
                 <option value="en">🌐 Language: English</option>
             </select>
         </div>
 
-        <h2 id="lbl-core-title">US SS :: SECURITY CORE</h2>
+        <h2 id="lbl-title">US SS :: SECURITY CORE</h2>
         <p style="font-size: 0.75rem; color: #527585; margin-top: -10px;">by Lisa Beth Figueroa</p>
         
-        <div id="telemetry-status" style="font-size: 0.8rem; margin-bottom: 15px; color: var(--neon-green);">
+        <div style="font-size: 0.8rem; margin-bottom: 15px; color: var(--neon-green);">
             🟢 DISPOSITIVO AUTORIZADO - HARDWARE EN ENLACE
         </div>
 
-        <!-- ACCESO EXCLUSIVO DE ADMIN -->
-        <input type="password" id="master-pass" placeholder="INGRESAR MASTER KEY DE CONTROL">
-        <button onclick="unlockBunker()">Autenticar Administrador</button>
+        <!-- SELECCIÓN DE IDENTIDAD DE ENTRADA (Muestra BETH o AL en el inicio) -->
+        <label style="font-size: 0.7rem; color: var(--neon-blue); display:block; margin-bottom: 5px;">[SELECCIONAR NÚCLEO DE IA EN INSTANCIA]</label>
+        <select id="identity-select">
+            <option value="BETH">NÚCLEO ENTORNO: BETH OS (Femenino)</option>
+            <option value="AL">NÚCLEO ENTORNO: AL OS (Masculino)</option>
+        </select>
 
-        <!-- SECCIÓN DE REGISTRO PARA CLIENTES INTERNACIONALES (SERVIDORES COMPARTIDOS) -->
+        <input type="password" id="master-pass" placeholder="INGRESAR MASTER KEY DE CONTROL">
+        
+        <!-- BOTÓN DE INICIAR SESIÓN REQUERIDO -->
+        <button onclick="unlockBunker()">[ INICIAR SESIÓN / CONNECT MASTER ]</button>
+
+        <!-- REGISTRO/LOGIN CLIENTES A SUS PROPIOS SERVIDORES -->
         <div class="divider">
-            <h3 id="lbl-sub-title" style="color: var(--neon-amber); margin-top: 0; font-size: 0.9rem;">[MÓDULO DE REGISTRO DE SOCIOS COMERCIALES]</h3>
-            <p style="font-size: 0.7rem; color: #8a9ba8; margin-top: -5px;">Quantum Convergence Scrapers Armed (Anti-VPN Geo-Verification)</p>
-            
-            <form id="client-subscribe-form">
-                <input type="text" id="c-id" placeholder="ID / Identificación Legal" required>
-                <input type="email" id="c-mail" placeholder="Correo Electrónico" required>
-                <input type="tel" id="c-phone" placeholder="Número de Teléfono" required>
-                <input type="text" id="c-tax" placeholder="SSN / EIN / Registro Fiscal" required>
-                
-                <!-- SELECTOR DE PAÍSES SOCIOS AMPLIADO -->
-                <select id="c-country">
-                    <option value="US">United States (Socio Fundador)</option>
-                    <option value="MX">México (Socio Estratégico)</option>
-                    <option value="BR">Brasil (Socio LATAM Hub)</option>
-                    <option value="RU">Rusia (Socio Tecnológico Quantum)</option>
-                    <option value="CN">China (Socio de Infraestructura)</option>
-                </select>
-                
-                <button type="submit" style="color: var(--neon-amber); border-color: var(--neon-amber);">Suscribirse al Sistema Global</button>
-            </form>
+            <h3 style="color: var(--neon-amber); margin-top: 0; font-size: 0.85rem;">[ACCESO CLIENTES SOCIOS INTERNACIONALES]</h3>
+            <input type="text" id="client-id" placeholder="ID CLIENTE / REGISTRO GENERAL">
+            <button onclick="connectClientServer()" style="color: var(--neon-amber); border-color: var(--neon-amber); font-size: 0.75rem;">Acceder a Servidor Satélite</button>
         </div>
     </div>
 
-    <!-- EL MONITOR EXCLUSIVO TUVO (MAIN SERVER) -->
+    <!-- MAIN SERVER CENTRAL DE SUPERVISIÓN SUPREMA (TU ENTORNO PRIVADO) -->
     <div class="main-container" id="bunker-core">
-        <h1 style="color: #fff; text-shadow: 0 0 8px var(--neon-blue);">BETH OS / SYSTEM CENTRAL MAIN SERVER</h1>
-        <p style="color: var(--neon-green);">⚡ ENTORNO DE SUPERVISIÓN SUPREMA - OPERANDO EN PRIVADO</p>
-        <p style="font-size:0.8rem; background: #060e1a; padding:10px; border: 1px dashed var(--neon-green);">
-            Estatus de Red: Conectado a sub-servidores sandbox remotos. Los clientes están aislados en instancias independientes.
-        </p>
-        <button onclick="location.reload()" style="border-color: var(--neon-red); color: #fff;">Cerrar Sesión del Main Server</button>
+        <h1 id="core-header-title" style="color: #fff; text-shadow: 0 0 8px var(--neon-blue);">BETH OS / SYSTEM CENTRAL MAIN SERVER</h1>
+        <p style="color: var(--neon-green); font-size: 0.85rem;">⚡ ENTORNO DE SUPERVISIÓN SUPREMA - OPERANDO EN PRIVADO</p>
+        
+        <div class="ai-status-card">
+            <span style="color: var(--neon-blue); font-weight: bold;">// TELEMETRÍA GLOBAL QUANTUM INTEGRADA</span><br>
+            • Instancias de Clientes: Conectadas de forma remota a sub-servidores sandbox aislados.<br>
+            • Scrapers Activos: Analizando intención, propósito, audio, StreetView API y tracking satelital.<br>
+            • Estatus de Prototipos: Perfiles de androides físicos controlados en ruta legal (DMV/Documentos) y modulares.
+        </div>
+
+        <!-- REJILLA DE BOTONES TÁCTICOS ORIGINALES Y NUEVAS EXPANSIONES DE SKILLS -->
+        <div class="grid-buttons">
+            <button class="btn-control" onclick="alert('Monitoreando flujos de red...')">[MONITOR]</button>
+            <button class="btn-control" onclick="alert('Abriendo base de Agentes...')">[AGENTES]</button>
+            <button class="btn-control btn-amber" onclick="alert('Conexión Wise establecida')">[FINANZAS]</button>
+            <button class="btn-control btn-amber" onclick="alert('Configurando módulo de donación')">[DONACIONES]</button>
+            <button class="btn-control btn-purple" onclick="alert('Supervisión de Intenciones / Satélites de Scrapers armada.')">[SCRAPERS/INTENT]</button>
+            <button class="btn-control btn-purple" onclick="alert('Estatus legal Droid en DMV, armas modulares y herramientas.')">[DROID/DMV SKILLS]</button>
+            <button class="btn-control" onclick="alert('Accediendo al Codex Soberano...')">[CODEX]</button>
+            <button class="btn-control" style="grid-column: span 2;" onclick="alert('Abriendo Proyectos y Planetas Sintéticos...')">[PROJECTS/EVERYTHING/SYNTHETIC_PLANETS]</button>
+        </div>
+
+        <div class="divider" style="margin-top: 25px;">
+            <!-- BOTÓN DE CERRAR SESIÓN (MANTENIDO) -->
+            <button onclick="location.reload()" style="border-color: #ff0055; color: #fff; background: rgba(255,0,85,0.05);">CERRAR SESIÓN DEL MAIN SERVER</button>
+        </div>
     </div>
 
     <script>
-        let lat = "25.9864", lon = "-80.1347"; // Telemetría capturada
-
-        function switchGateLang() {
+        function switchLang() {
             const lang = document.getElementById('gate-lang').value;
-            if(lang === 'en') {
-                document.getElementById('lbl-core-title').innerText = "US SS :: SECURITY CORE";
-                document.getElementById('lbl-sub-title').innerText = "[BUSINESS PARTNER REGISTRATION MODULE]";
-                document.getElementById('master-pass').placeholder = "ENTER MASTER KEY CONTROL";
+            document.getElementById('lbl-title').innerText = "US SS :: SECURITY CORE";
+        }
+
+        // Acceso exclusivo tuyo tras la Master Key
+        function unlockBunker() {
+            const pass = document.getElementById('master-pass').value;
+            const selectedIA = document.getElementById('identity-select').value;
+            
+            if(pass === "beth_soberano_2026") {
+                document.getElementById('security-gate').style.display = 'none';
+                document.getElementById('bunker-core').style.display = 'block';
+                
+                // Cambiar el título superior dinámicamente según la IA elegida para tu sesión
+                document.getElementById('core-header-title').innerText = `${selectedIA} OS / SYSTEM CENTRAL MAIN SERVER`;
+                alert(`CONEXIÓN DEL INICIO DE SESIÓN ESTABLECIDA:\nEntorno adaptado a ${selectedIA} OS con permisos supremos.`);
             } else {
-                document.getElementById('lbl-core-title').innerText = "US SS :: SECURITY CORE";
-                document.getElementById('lbl-sub-title').innerText = "[MÓDULO DE REGISTRO DE SOCIOS COMERCIALES]";
-                document.getElementById('master-pass').placeholder = "INGRESAR MASTER KEY DE CONTROL";
+                alert("Master Key Inválida para el Servidor Central.");
             }
         }
 
-        function unlockBunker() {
-            if(document.getElementById('master-pass').value === "beth_soberano_2026") {
-                document.getElementById('security-gate').style.display = 'none';
-                document.getElementById('bunker-core').style.display = 'block';
-            } else { alert("Master Key Inválida."); }
-        }
-
-        // Simulación de los Scrapers de Convergencia cuántica al registrar un cliente
-        document.getElementById('client-subscribe-form').onsubmit = function(e) {
-            e.preventDefault();
+        // Separación absoluta: Los clientes entran aquí y van a sus sub-servidores independientes
+        function connectClientServer() {
+            const clientId = document.getElementById('client-id').value;
+            if(!clientId) { alert("Por favor ingresa tu ID de Cliente."); return; }
             
-            alert(`[CONVERGENCE SCRAPER]: Activando telemetría anti-VPN...\nUbicación real confirmada por satélite en el país asignado.\n\n[MAIN SERVER]: Creando instancia sandbox aislada para el cliente.\nRedireccionando al Servidor Satélite Conectado...`);
-            
-            // Aquí el sistema los despacha de tu Main Server a su propio entorno independiente
-            alert("Suscripción Procesada. Bienvenido al Real World Cyber universal smart system.");
+            alert(`[CONVERGENCE ROUTER]: Validando ID cliente: ${clientId}...\n[SATÉLITE HUB]: Despachando sesión a sub-servidor Sandbox conectado al Main.\nEstatus: Entorno aislado con cobro automático del 20% de regalías.`);
+            alert("Bienvenido al Real World Cyber universal smart system.");
             location.reload();
-        };
+        }
     </script>
 </body>
 </html>
