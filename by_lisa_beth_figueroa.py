@@ -1,7 +1,6 @@
 import os
 from flask import Flask, render_template, jsonify, request, redirect
 
-# Intentar importar la librería oficial de Stripe
 try:
     import stripe
     stripe.api_key = os.environ.get("STRIPE_SECRET_KEY")
@@ -14,35 +13,49 @@ app = Flask(__name__)
 def home():
     return render_template('index.html')
 
-@app.route('/api/checkout', methods=['POST'])
-def create_checkout_session():
-    if not stripe or not stripe.api_key:
-        return jsonify({"error": "Stripe no configurado en las variables de entorno de Vercel"}), 500
+# EL ROBOT MANAGER DE FINANZAS CENTRALIZADO
+@app.route('/api/finance/manager', methods=['POST'])
+def finance_manager():
+    data = request.get_json() or {}
+    via = data.get("gateway", "stripe") # Vía por defecto si no se especifica
+    amount = data.get("amount", 2500)   # Monto por defecto ($25.00)
     
-    try:
-        # Creamos una sesión de cobro real por un servicio digital
-        checkout_session = stripe.checkout.Session.create(
-            payment_method_types=['card'],
-            line_items=[
-                {
-                    'price_data': {
-                        'currency': 'usd',
-                        'product_data': {
-                            'name': 'Servicio de Inteligencia Autónoma - BETH OS',
-                        },
-                        'unit_amount': 2500, # Monto en centavos (Ejemplo: $25.00 USD)
-                    },
-                    'quantity': 1,
-                },
-            ],
-            mode='payment',
-            # Si el pago es exitoso o cancelado, regresa al centro de mando
-            success_url=request.host_url + '?payment=success',
-            cancel_url=request.host_url + '?payment=cancel',
-        )
-        return redirect(checkout_session.url, code=303)
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+    # CANAL 1: ORQUESTADOR STRIPE
+    if via == "stripe":
+        if not stripe or not stripe.api_key:
+            return jsonify({"status": "error", "message": "Stripe Engine Offline"}), 500
+        try:
+            session = stripe.checkout.Session.create(
+                payment_method_types=['card'],
+                line_items=[{'price_data': {'currency': 'usd', 'product_data': {'name': 'BETH OS - Digital Service'}, 'unit_amount': amount}, 'quantity': 1}],
+                mode='payment',
+                success_url=request.host_url + '?payment=success',
+                cancel_url=request.host_url + '?payment=cancel',
+            )
+            return jsonify({"status": "redirect", "url": session.url})
+        except Exception as e:
+            return jsonify({"status": "error", "message": str(e)}), 500
+            
+    # CANAL 2: ORQUESTADOR WISE / TRANSFERENCIA
+    elif via == "wise":
+        # Aquí el Robot Manager genera las instrucciones de depósito automatizadas de Wise
+        profile_id = os.environ.get("WISE_PROFILE_ID", "lisaf1339")
+        return jsonify({
+            "status": "instructions",
+            "gateway": "Wise Global",
+            "account_holder": "Lisa Beth Figueroa",
+            "profile_reference": profile_id,
+            "message": f"Robot Manager ha apartado un folio para depósito de ${amount/100} USD."
+        })
+        
+    # CANAL 3: ORQUESTADOR CRIPTO (Vía de respaldo futura)
+    elif via == "crypto":
+        return jsonify({
+            "status": "crypto_gate",
+            "message": "Orquestador Crypto esperando enlace a Wallet Soberana."
+        })
+
+    return jsonify({"status": "error", "message": "Vía de pago no identificada por el Robot Manager"}), 400
 
 @app.route('/api/chat', methods=['POST'])
 def chat():
