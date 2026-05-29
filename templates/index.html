@@ -12,39 +12,17 @@
             --neon-green: #00ff66;
             --dark-bg: #03070d;
             --panel-bg: rgba(6, 14, 26, 0.9);
-            --border-glow: rgba(0, 240, 255, 0.25);
         }
-
         body {
             background-color: var(--dark-bg);
             color: #d1f4ff;
             font-family: 'Courier New', Courier, monospace;
             margin: 0;
             padding: 15px;
-            box-sizing: border-box;
-            min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
-
-        .matrix-header {
-            width: 100%;
-            max-width: 800px;
-            background: var(--panel-bg);
-            border: 1px solid var(--neon-blue);
-            box-shadow: 0 0 15px var(--border-glow);
-            padding: 15px;
-            border-radius: 4px;
-            margin-bottom: 20px;
-            font-size: 0.85rem;
-            line-height: 1.4;
-        }
-
-        .cyan-text { color: var(--neon-blue); }
-        .amber-text { color: var(--neon-amber); }
-        .green-text { color: var(--neon-green); }
-
         .main-container {
             width: 100%;
             max-width: 800px;
@@ -53,192 +31,60 @@
             border-radius: 6px;
             padding: 20px;
             box-sizing: border-box;
-        }
-
-        h1 {
-            font-size: 1.4rem;
             text-align: center;
-            letter-spacing: 3px;
-            margin-top: 0;
-            color: #ffffff;
-            text-shadow: 0 0 8px var(--neon-blue);
         }
-
-        /* PANEL DE CONTABILIDAD TÁCTICA */
-        .metrics-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            margin: 20px 0;
-        }
-
-        .metric-card {
-            background: rgba(0, 240, 255, 0.02);
-            border: 1px solid rgba(0, 240, 255, 0.2);
-            padding: 15px;
+        h1 { font-size: 1.4rem; letter-spacing: 3px; color: #fff; text-shadow: 0 0 8px var(--neon-blue); }
+        
+        .tier-selector {
+            background: rgba(0,240,255,0.05);
+            border: 1px solid var(--neon-blue);
+            color: var(--neon-blue);
+            padding: 10px;
+            font-family: inherit;
+            width: 100%;
+            margin-bottom: 15px;
             border-radius: 4px;
-            text-align: left;
         }
-
-        .metric-val {
-            font-size: 1.6rem;
-            font-weight: bold;
-            margin-top: 5px;
-        }
-
-        /* MONITOR DE GRÁFICAS */
-        .chart-container {
-            background: #060e1a;
-            border: 1px dashed rgba(0, 240, 255, 0.3);
-            padding: 15px;
-            border-radius: 4px;
-            margin: 20px 0;
-            display: none; /* Se activa al presionar [MONITOR] */
-        }
-
-        .grid-buttons {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        @media(min-width: 600px) {
-            .grid-buttons { grid-template-columns: repeat(3, 1fr); }
-        }
+        option { background: #060e1a; color: #fff; }
 
         .matrix-btn {
             background: rgba(0, 240, 255, 0.03);
             color: #a3e8ff;
             border: 1px solid rgba(0, 240, 255, 0.3);
-            padding: 12px 5px;
+            padding: 12px;
+            width: 100%;
             font-family: inherit;
-            font-size: 0.8rem;
             font-weight: bold;
-            text-transform: uppercase;
             cursor: pointer;
-            transition: all 0.2s ease;
-            border-radius: 3px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
         }
-
         .matrix-btn:hover {
             background: rgba(0, 240, 255, 0.15);
-            color: #ffffff;
-            box-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
             border-color: var(--neon-blue);
-        }
-
-        .btn-amber {
-            border-color: rgba(255, 170, 0, 0.4);
-            color: #ffe6b3;
-        }
-        .btn-amber:hover {
-            background: rgba(255, 170, 0, 0.15);
-            box-shadow: 0 0 10px rgba(255, 170, 0, 0.5);
-            border-color: var(--neon-amber);
-        }
-
-        .footer-device {
-            margin-top: 25px;
-            font-size: 0.7rem;
-            color: #527585;
-            border-top: 1px dashed rgba(0, 240, 255, 0.1);
-            padding-top: 10px;
-            line-height: 1.5;
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
         }
     </style>
 </head>
 <body>
-
-    <div class="matrix-header">
-        <span class="green-text">NODE_PIXEL_8_LIVE</span><br>
-        // MONITOR_MATRIX <br>
-        🌐 <span class="cyan-text">ECOSYSTEM01</span> 🤖 <span class="amber-text">AI_AGENTS02</span><br>
-        // ASSETS_INDEX <br>
-        Drive_DataCONNECTED | Vault_APIsARMED <br>
-        <span class="cyan-text">SYS_LEVEL :: v2.6_ASYM</span>
-    </div>
-
     <div class="main-container">
-        <h1>BETH OS / SMART COMMAND CENTER</h1>
+        <h1>BETH OS / SYSTEM MULTI-TIER</h1>
         
-        <div class="metrics-grid">
-            <div class="metric-card">
-                <span class="cyan-text">// BALANCE TOTAL</span>
-                <div class="metric-val">$0.00 USD</div>
-            </div>
-            <div class="metric-card" style="border-color: rgba(255,170,0,0.2);">
-                <span class="amber-text">// COIN VAULT</span>
-                <div class="metric-val">0.000 BTC</div>
-            </div>
-        </div>
-
-        <div id="monitor-panel" class="chart-container">
-            <span class="cyan-text">// MATRIX ANALYTICS FLUX</span>
-            <canvas id="financeChart" style="width:100%; height:200px; margin-top:10px;"></canvas>
-        </div>
-
-        <div class="grid-buttons">
-            <button class="matrix-btn" onclick="toggleMonitor()">[MONITOR]</button>
-            <button class="matrix-btn" onclick="alert('Desplegando lista de Agentes Autónomos...')">[AGENTES]</button>
-            <button class="matrix-btn btn-amber" onclick="alert('Wise Invoice: ' + JSON.stringify({gateway: 'wise', profile: 'lisaf1339'}))">[FINANZAS]</button>
-            <button class="matrix-btn btn-amber" onclick="document.getElementById('pay-form').submit()">[DONACIONES]</button>
-            <button class="matrix-btn" onclick="alert('Cargando Codex Soberano de Datos...')">[CODEX]</button>
-            <button class="matrix-btn" onclick="alert('Abriendo Repositorio de Proyectos...')">[PROJECTS/EVERYTHING]</button>
-        </div>
-
-        <form id="pay-form" action="/api/finance/manager" method="POST" style="display:none;">
-            <input type="hidden" name="gateway" value="stripe">
-            <input type="hidden" name="amount" value="2500">
+        <form action="/api/finance/manager" method="POST">
+            <label for="tier" style="display:block; margin-bottom:10px; font-size:0.8rem;">[SELECCIONAR ESCALAFÓN DE ACCESO]</label>
+            <select name="tier" id="tier" class="tier-selector">
+                <option value="free">Tier Free ($0.00)</option>
+                <option value="low">Low Level ($0.50)</option>
+                <option value="medium">Medium Level ($5.00)</option>
+                <option value="high">High Level ($15.00)</option>
+                <option value="next_level">Next Level ($50.00)</option>
+                <option value="1">Level 1 (80/20 Clone System)</option>
+                <option value="2">Level 2 (80/20 Clone System)</option>
+                <option value="3">Level 3 (80/20 Clone System)</option>
+            </select>
+            
+            <button type="submit" class="matrix-btn">Activar Módulo y Procesar Canal</button>
         </form>
-
-        <div class="footer-device">
-            DEVICE_DATA: Pixel 8 (Google)<br>
-            SYSTEM_VERSION: CP1A.260405.005<br>
-            STATUS: SECURE SERVERLESS CLOUD RUNTIME (Vercel Verified)
-        </div>
     </div>
-
-    <script>
-        // Función para ocultar/mostrar el módulo de Gráficas interactivo
-        function toggleMonitor() {
-            var panel = document.getElementById('monitor-panel');
-            if (panel.style.display === 'none' || panel.style.display === '') {
-                panel.style.display = 'block';
-                initChart();
-            } else {
-                panel.style.display = 'none';
-            }
-        }
-
-        // Configuración y renderizado de la gráfica de flujos financieros
-        let chartInstance = null;
-        function initChart() {
-            if (chartInstance) return; // Evitar duplicados
-            const ctx = document.getElementById('financeChart').getContext('2d');
-            chartInstance = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00'],
-                    datasets: [{
-                        label: 'Flujo de Transacciones ($)',
-                        data: [0, 0, 0, 0, 0, 0], // Inicia en ceros reales hasta recibir transacciones de clientes
-                        borderColor: '#00f0ff',
-                        backgroundColor: 'rgba(0, 240, 255, 0.05)',
-                        borderWidth: 2,
-                        tension: 0.4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: { legend: { display: false } },
-                    scales: {
-                        x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#527585' } },
-                        y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#527585' } }
-                    }
-                }
-            });
-        }
-    </script>
 </body>
 </html>
