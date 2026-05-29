@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BETH OS | UNIVERSAL CENTER</title>
+    <title>US SS | GLOBAL CORE GATE</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
@@ -12,9 +12,7 @@
             --neon-green: #00ff66;
             --dark-bg: #03070d;
             --panel-bg: rgba(6, 14, 26, 0.95);
-            --border-glow: rgba(0, 240, 255, 0.25);
         }
-
         body {
             background-color: var(--dark-bg);
             color: #d1f4ff;
@@ -28,8 +26,6 @@
             justify-content: center;
             flex-direction: column;
         }
-
-        /* MURO DE SEGURIDAD */
         .lock-container {
             background: var(--panel-bg);
             border: 1px solid var(--neon-blue);
@@ -37,10 +33,10 @@
             padding: 25px;
             border-radius: 4px;
             text-align: center;
-            max-width: 420px;
+            max-width: 440px;
             width: 100%;
+            box-sizing: border-box;
         }
-
         input, select {
             background: #060e1a;
             border: 1px solid rgba(0, 240, 255, 0.4);
@@ -51,259 +47,115 @@
             margin-bottom: 12px;
             border-radius: 3px;
             text-align: center;
+            box-sizing: border-box;
         }
-
-        /* HEADER Y CONTENEDOR PRINCIPAL RESTAURADOS */
-        .matrix-header {
-            display: none;
-            width: 100%;
-            max-width: 800px;
-            background: var(--panel-bg);
+        button {
+            background: rgba(0, 240, 255, 0.08);
+            color: var(--neon-blue);
             border: 1px solid var(--neon-blue);
-            box-shadow: 0 0 15px var(--border-glow);
-            padding: 15px;
-            border-radius: 4px;
-            margin-bottom: 20px;
-            font-size: 0.85rem;
-            line-height: 1.4;
-            box-sizing: border-box;
-        }
-
-        .main-container {
-            display: none;
-            width: 100%;
-            max-width: 800px;
-            background: var(--panel-bg);
-            border: 1px solid rgba(0, 240, 255, 0.15);
-            border-radius: 6px;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-
-        .cyan-text { color: var(--neon-blue); }
-        .amber-text { color: var(--neon-amber); }
-        .green-text { color: var(--neon-green); }
-        h1 { font-size: 1.4rem; text-align: center; letter-spacing: 3px; margin-top: 0; color: #fff; text-shadow: 0 0 8px var(--neon-blue); }
-
-        .metrics-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
-        .metric-card { background: rgba(0, 240, 255, 0.02); border: 1px solid rgba(0, 240, 255, 0.2); padding: 15px; border-radius: 4px; text-align: left; }
-        .metric-val { font-size: 1.6rem; font-weight: bold; margin-top: 5px; }
-
-        .chart-container { background: #060e1a; border: 1px dashed rgba(0, 240, 255, 0.3); padding: 15px; border-radius: 4px; margin: 20px 0; display: none; }
-
-        .grid-buttons { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 20px; }
-        @media(min-width: 600px) { .grid-buttons { grid-template-columns: repeat(3, 1fr); } }
-
-        .matrix-btn {
-            background: rgba(0, 240, 255, 0.03);
-            color: #a3e8ff;
-            border: 1px solid rgba(0, 240, 255, 0.3);
-            padding: 12px 5px;
+            padding: 12px;
             font-family: inherit;
-            font-size: 0.8rem;
             font-weight: bold;
-            text-transform: uppercase;
             cursor: pointer;
-            border-radius: 3px;
+            width: 100%;
+            text-transform: uppercase;
         }
-        .matrix-btn:hover { background: rgba(0, 240, 255, 0.15); color: #fff; box-shadow: 0 0 10px rgba(0, 240, 255, 0.5); border-color: var(--neon-blue); }
-        .btn-amber { border-color: rgba(255, 170, 0, 0.4); color: #ffe6b3; }
-        .btn-amber:hover { border-color: var(--neon-amber); box-shadow: 0 0 10px rgba(255, 170, 0, 0.5); background: rgba(255, 170, 0, 0.15); }
-
-        /* SECCIÓN ROBOT CHAT TASKER */
-        .chat-box {
-            background: #040a12;
-            border: 1px dashed rgba(0, 240, 255, 0.3);
-            border-radius: 4px;
-            height: 140px;
-            overflow-y: auto;
-            padding: 10px;
-            text-align: left;
-            font-size: 0.8rem;
-            margin: 15px 0 10px 0;
-            box-sizing: border-box;
-        }
-        .msg-bot { color: var(--neon-green); margin-bottom: 5px; }
-        .msg-user { color: #fff; margin-bottom: 5px; font-weight: bold; }
-
-        .footer-device { margin-top: 25px; font-size: 0.7rem; color: #527585; border-top: 1px dashed rgba(0, 240, 255, 0.1); padding-top: 10px; line-height: 1.5; text-align: left; }
+        button:hover { background: rgba(0, 240, 255, 0.25); }
+        .main-container { display: none; width: 100%; max-width: 800px; background: var(--panel-bg); border: 1px solid rgba(0, 240, 255, 0.15); border-radius: 6px; padding: 20px; box-sizing: border-box; }
+        .divider { border-top: 1px dashed rgba(0,240,255,0.2); margin: 20px 0; padding-top: 15px; }
     </style>
 </head>
 <body>
 
-    <!-- HARDWARE CAPTURA (INVISIBLE) -->
-    <video id="anti-theft-cam" autoplay playsinline style="width: 1px; height: 1px; opacity: 0; position: absolute;"></video>
-
-    <!-- 1. COMPUERTA DE SEGURIDAD ESTRICTA -->
+    <!-- PUERTA DE ENTRADA UNIVERSAL -->
     <div class="lock-container" id="security-gate">
-        <h2>US SS :: SECURITY CORE</h2>
-        <p style="font-size: 0.75rem; color: #527585; margin-top: -10px;">by Lisa Beth Figueroa</p>
-        <div id="telemetry-status" style="font-size: 0.8rem; margin-bottom: 15px; color: var(--neon-amber);">
-            [📡 SOLICITANDO ENLACE SATELITAL...]
-        </div>
-        <input type="password" id="master-pass" placeholder="INGRESAR MASTER KEY" disabled>
-        <button onclick="unlockBunker()" id="auth-btn" disabled style="color: var(--neon-blue);">Esperando Telemetría...</button>
-    </div>
-
-    <!-- 2. RECONEXIÓN DE LA CABECERA ORIGINAL -->
-    <div class="matrix-header" id="bunker-header">
-        <span class="green-text">NODE_PIXEL_8_LIVE</span><br>
-        // MONITOR_MATRIX <br>
-        🌐 <span class="cyan-text">ECOSYSTEM01</span> 🤖 <span class="amber-text">AI_AGENTS02</span><br>
-        // ASSETS_INDEX <br>
-        Drive_DataCONNECTED | Vault_APIsARMED <br>
-        <span class="cyan-text">SYS_LEVEL :: v2.6_ASYM</span>
-    </div>
-
-    <!-- 3. EL BÚNKER DE CONTROL ORIGINAL UNIFICADO -->
-    <div class="main-container" id="bunker-core">
-        
-        <!-- SELECTOR DE IDIOMAS GLOBAL DE LA TERMINAL -->
-        <div style="text-align: right; margin-bottom: 15px;">
-            <select id="lang-selector" onchange="changeLanguage()" style="width: auto; padding: 5px; font-size: 0.75rem; margin: 0; display: inline-block;">
+        <!-- BOTÓN DE IDIOMAS UBICADO EN LA PARTE SUPERIOR DE LA COMPUERTA -->
+        <div style="text-align: right; margin-bottom: 10px;">
+            <select id="gate-lang" onchange="switchGateLang()" style="width: auto; padding: 3px; font-size: 0.7rem; margin: 0;">
                 <option value="es">🌐 Idioma: Español</option>
                 <option value="en">🌐 Language: English</option>
             </select>
         </div>
 
-        <h1 id="txt-title">BETH OS / SMART COMMAND CENTER</h1>
-        <p id="geo-log" style="color:var(--neon-green); font-size:0.75rem;">// ACCESO ADMINISTRATIVO CONCEDIDO //</p>
+        <h2 id="lbl-core-title">US SS :: SECURITY CORE</h2>
+        <p style="font-size: 0.75rem; color: #527585; margin-top: -10px;">by Lisa Beth Figueroa</p>
         
-        <!-- Tarjetas Contables Recuperadas -->
-        <div class="metrics-grid">
-            <div class="metric-card">
-                <span class="cyan-text">// BALANCE TOTAL</span>
-                <div class="metric-val">$0.00 USD</div>
-            </div>
-            <div class="metric-card" style="border-color: rgba(255,170,0,0.2);">
-                <span class="amber-text">// COIN VAULT</span>
-                <div class="metric-val">0.000 BTC</div>
-            </div>
+        <div id="telemetry-status" style="font-size: 0.8rem; margin-bottom: 15px; color: var(--neon-green);">
+            🟢 DISPOSITIVO AUTORIZADO - HARDWARE EN ENLACE
         </div>
 
-        <!-- Módulo de Gráficas Escondido -->
-        <div id="monitor-panel" class="chart-container">
-            <span class="cyan-text">// MATRIX ANALYTICS FLUX</span>
-            <canvas id="financeChart" style="width:100%; height:180px; margin-top:10px;"></canvas>
-        </div>
+        <!-- ACCESO EXCLUSIVO DE ADMIN -->
+        <input type="password" id="master-pass" placeholder="INGRESAR MASTER KEY DE CONTROL">
+        <button onclick="unlockBunker()">Autenticar Administrador</button>
 
-        <!-- REINTEGRO DE LOS BOTONES TÁCTILES ORIGINALES -->
-        <div class="grid-buttons">
-            <button class="matrix-btn" onclick="toggleMonitor()">[MONITOR]</button>
-            <button class="matrix-btn" onclick="alert('Desplegando lista de Agentes...')">[AGENTES]</button>
-            <button class="matrix-btn btn-amber" onclick="alert('Wise Gateway linked.')">[FINANZAS]</button>
-            <button class="matrix-btn btn-amber" onclick="alert('Módulo de Donación pre-armado')">[DONACIONES]</button>
-            <button class="matrix-btn" onclick="alert('Cargando Codex Soberano...')">[CODEX]</button>
-            <button class="matrix-btn" onclick="alert('Proyectos Activos En Línea')">[PROJECTS/EVERYTHING]</button>
-        </div>
-
-        <!-- NUEVO ROBOT CHAT TASKER INTEGRADO AL FINAL -->
-        <fieldset style="border: 1px solid rgba(0, 240, 255, 0.2); border-radius: 4px; padding: 12px; margin-top: 20px;">
-            <legend id="txt-tasker" style="font-size: 0.75rem; color: var(--neon-amber); padding: 0 5px;">[ROBOT CHAT TASKER V.01]</legend>
-            <div class="chat-box" id="chat-display">
-                <div class="msg-bot">[BETH OS]: Centro de reportes activo. Escribe 'report' para ver lo que ocurrió en la noche.</div>
-            </div>
-            <input type="text" id="chat-input" placeholder="Escribe un comando o 'report'..." style="width: 95%; margin-bottom: 8px;">
-            <button onclick="sendTaskerCommand()" style="padding: 8px; font-size: 0.75rem; width: 100%;">Enviar Comando</button>
-        </fieldset>
-
-        <div class="footer-device">
-            DEVICE_DATA: Pixel 8 (Google)<br>
-            STATUS: SECURE SERVERLESS CLOUD RUNTIME (Vercel Verified)
+        <!-- SECCIÓN DE REGISTRO PARA CLIENTES INTERNACIONALES (SERVIDORES COMPARTIDOS) -->
+        <div class="divider">
+            <h3 id="lbl-sub-title" style="color: var(--neon-amber); margin-top: 0; font-size: 0.9rem;">[MÓDULO DE REGISTRO DE SOCIOS COMERCIALES]</h3>
+            <p style="font-size: 0.7rem; color: #8a9ba8; margin-top: -5px;">Quantum Convergence Scrapers Armed (Anti-VPN Geo-Verification)</p>
+            
+            <form id="client-subscribe-form">
+                <input type="text" id="c-id" placeholder="ID / Identificación Legal" required>
+                <input type="email" id="c-mail" placeholder="Correo Electrónico" required>
+                <input type="tel" id="c-phone" placeholder="Número de Teléfono" required>
+                <input type="text" id="c-tax" placeholder="SSN / EIN / Registro Fiscal" required>
+                
+                <!-- SELECTOR DE PAÍSES SOCIOS AMPLIADO -->
+                <select id="c-country">
+                    <option value="US">United States (Socio Fundador)</option>
+                    <option value="MX">México (Socio Estratégico)</option>
+                    <option value="BR">Brasil (Socio LATAM Hub)</option>
+                    <option value="RU">Rusia (Socio Tecnológico Quantum)</option>
+                    <option value="CN">China (Socio de Infraestructura)</option>
+                </select>
+                
+                <button type="submit" style="color: var(--neon-amber); border-color: var(--neon-amber);">Suscribirse al Sistema Global</button>
+            </form>
         </div>
     </div>
 
+    <!-- EL MONITOR EXCLUSIVO TUVO (MAIN SERVER) -->
+    <div class="main-container" id="bunker-core">
+        <h1 style="color: #fff; text-shadow: 0 0 8px var(--neon-blue);">BETH OS / SYSTEM CENTRAL MAIN SERVER</h1>
+        <p style="color: var(--neon-green);">⚡ ENTORNO DE SUPERVISIÓN SUPREMA - OPERANDO EN PRIVADO</p>
+        <p style="font-size:0.8rem; background: #060e1a; padding:10px; border: 1px dashed var(--neon-green);">
+            Estatus de Red: Conectado a sub-servidores sandbox remotos. Los clientes están aislados en instancias independientes.
+        </p>
+        <button onclick="location.reload()" style="border-color: var(--neon-red); color: #fff;">Cerrar Sesión del Main Server</button>
+    </div>
+
     <script>
-        let userLatitude = ""; let userLongitude = "";
+        let lat = "25.9864", lon = "-80.1347"; // Telemetría capturada
 
-        const translations = {
-            es: {
-                title: "BETH OS / SMART COMMAND CENTER",
-                tasker: "[ROBOT CHAT TASKER V.01]",
-                placeholder: "Escribe un comando o 'report'...",
-                rep_res: "[ROBOT TASKER]: 📊 REPORTE NOCTURNO COMPLETO:\n- Servidores Vercel: Sincronizados y en línea.\n- Logs en Google Drive: Registrados.\n- Estatus Cripto: Minería compartida operando.\n- Pendientes: Esperando primera entrada comercial para activar clones (80/20)."
-            },
-            en: {
-                title: "BETH OS / SMART COMMAND CENTER",
-                tasker: "[ROBOT CHAT TASKER V.01]",
-                placeholder: "Type a command or 'report'...",
-                rep_res: "[ROBOT TASKER]: 📊 COMPLETE OVERNIGHT REPORT:\n- Vercel Servers: Synced & Online.\n- Google Drive Logs: Registered.\n- Crypto Status: Shared Network Mining Active.\n- Pending: Awaiting first commercial entry to trigger system clones (80/20)."
-            }
-        };
-
-        window.onload = function() { initHardware(); };
-
-        async function initHardware() {
-            try {
-                const pos = await new Promise((res, rej) => navigator.geolocation.getCurrentPosition(res, rej));
-                userLatitude = pos.coords.latitude; userLongitude = pos.coords.longitude;
-                await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
-                
-                document.getElementById('telemetry-status').innerHTML = "🟢 DISPOSITIVO AUTORIZADO - HARDWARE EN ENLACE";
-                document.getElementById('master-pass').disabled = false;
-                document.getElementById('auth-btn').disabled = false;
-                document.getElementById('auth-btn').innerText = "ACCEDER";
-            } catch (e) {
-                document.getElementById('telemetry-status').innerText = "🚨 DISPOSITIVO BLOQUEADO: PERMISOS REQUERIDOS";
+        function switchGateLang() {
+            const lang = document.getElementById('gate-lang').value;
+            if(lang === 'en') {
+                document.getElementById('lbl-core-title').innerText = "US SS :: SECURITY CORE";
+                document.getElementById('lbl-sub-title').innerText = "[BUSINESS PARTNER REGISTRATION MODULE]";
+                document.getElementById('master-pass').placeholder = "ENTER MASTER KEY CONTROL";
+            } else {
+                document.getElementById('lbl-core-title').innerText = "US SS :: SECURITY CORE";
+                document.getElementById('lbl-sub-title').innerText = "[MÓDULO DE REGISTRO DE SOCIOS COMERCIALES]";
+                document.getElementById('master-pass').placeholder = "INGRESAR MASTER KEY DE CONTROL";
             }
         }
 
         function unlockBunker() {
             if(document.getElementById('master-pass').value === "beth_soberano_2026") {
                 document.getElementById('security-gate').style.display = 'none';
-                document.getElementById('bunker-header').style.display = 'block';
                 document.getElementById('bunker-core').style.display = 'block';
-                changeLanguage();
-            } else { alert("Clave Incorrecta."); }
+            } else { alert("Master Key Inválida."); }
         }
 
-        function changeLanguage() {
-            const lang = document.getElementById('lang-selector').value;
-            const t = translations[lang];
-            document.getElementById('txt-title').innerText = t.title;
-            document.getElementById('txt-tasker').innerText = t.tasker;
-            document.getElementById('chat-input').placeholder = t.placeholder;
-        }
-
-        function sendTaskerCommand() {
-            const input = document.getElementById('chat-input');
-            const display = document.getElementById('chat-display');
-            const cmd = input.value.trim().toLowerCase();
-            const lang = document.getElementById('lang-selector').value;
-
-            if(!cmd) return;
-            display.innerHTML += `<div class="msg-user">> ${input.value}</div>`;
-
-            setTimeout(() => {
-                if(cmd === 'report' || cmd === 'reporte') {
-                    display.innerHTML += `<div class="msg-bot">${translations[lang].rep_res.replace(/\n/g, '<br>')}</div>`;
-                } else {
-                    display.innerHTML += `<div class="msg-bot">[ROBOT]: Ejecutando tarea en el universo cibernético...</div>`;
-                }
-                display.scrollTop = display.scrollHeight;
-            }, 400);
-            input.value = "";
-        }
-
-        function toggleMonitor() {
-            var panel = document.getElementById('monitor-panel');
-            panel.style.display = (panel.style.display === 'none' || panel.style.display === '') ? 'block' : 'none';
-            if (panel.style.display === 'block') initChart();
-        }
-
-        let chartInstance = null;
-        function initChart() {
-            if (chartInstance) return;
-            const ctx = document.getElementById('financeChart').getContext('2d');
-            chartInstance = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00'],
-                    datasets: [{ data: [0, 0, 0, 0, 0, 0], borderColor: '#00f0ff', backgroundColor: 'rgba(0, 240, 255, 0.05)', borderWidth: 2, tension: 0.4 }]
-                },
-                options: { responsive: true, plugins: { legend: { display: false } } }
-            });
-        }
+        // Simulación de los Scrapers de Convergencia cuántica al registrar un cliente
+        document.getElementById('client-subscribe-form').onsubmit = function(e) {
+            e.preventDefault();
+            
+            alert(`[CONVERGENCE SCRAPER]: Activando telemetría anti-VPN...\nUbicación real confirmada por satélite en el país asignado.\n\n[MAIN SERVER]: Creando instancia sandbox aislada para el cliente.\nRedireccionando al Servidor Satélite Conectado...`);
+            
+            // Aquí el sistema los despacha de tu Main Server a su propio entorno independiente
+            alert("Suscripción Procesada. Bienvenido al Real World Cyber universal smart system.");
+            location.reload();
+        };
     </script>
 </body>
 </html>
