@@ -1,4 +1,5 @@
 import os
+import json
 from flask import Flask, render_template, jsonify, request, redirect
 
 try:
@@ -9,76 +10,64 @@ except ImportError:
 
 app = Flask(__name__)
 
+MASTER_KEY = "beth_soberano_2026"
+
 @app.route('/')
 def home():
     return render_template('index.html')
 
-@app.route('/api/finance/manager', methods=['POST'])
-def finance_manager():
-    # Detectar datos
-    if request.content_type == 'application/json':
-        data = request.get_json() or {}
-        tier = data.get("tier", "free")
-        via = data.get("gateway", "stripe")
+@app.route('/api/auth/verify', methods=['POST'])
+def verify_auth():
+    data = request.get_json() or {}
+    if data.get("password") == MASTER_KEY:
+        return jsonify({"status": "granted"})
+    return jsonify({"status": "denied"}), 403
+
+# EL CORE INTELIGENTE INVISIBLE PARA EL CLIENTE
+@app.route('/api/system/onboard', methods=['POST'])
+def system_onboard():
+    data = request.get_json() or {}
+    
+    # 1. Captura de credenciales y datos de seguridad del portador
+    industry = data.get("industry", "General Commerce")
+    gender_selection = data.get("identity_gender", "female")
+    total_paid = float(data.get("total_paid", 0.0))
+    
+    # 2. Asignación automática e invisible del motor de Inteligencia Artificial
+    os_engine = "AL OS" if gender_selection == "male" else "BETH"
+    
+    # 3. Determinación de infraestructura y prototipo asignado según el pago
+    if total_paid >= 2000.0:
+        assigned_hardware = "Dedicated Flash/SD System Clone + Server Allocation"
+        split_rule = "80/20 Royalties Active"
+        status = "NEXT_LEVEL_SOPHISTICATED"
+    elif total_paid >= 50.0:
+        assigned_hardware = "Cloud Sandbox Terminal + Internet Shared Engine"
+        split_rule = "Standard Premium Access"
+        status = "MEDIUM_STAGE"
     else:
-        tier = request.form.get("tier", "free")
-        via = request.form.get("gateway", "stripe")
+        assigned_hardware = "Free Synthetic Smart System Tier (Shared Runtime)"
+        split_rule = "Zero Commision / Monitor Mode"
+        status = "FREE_TIER_MINING"
 
-    # Definición de Precios de entrada por Nivel (en centavos de USD)
-    tier_prices = {
-        "free": 0,
-        "low": 50,         # 0.50 USD
-        "medium": 500,     # 5.00 USD
-        "high": 1500,      # 15.00 USD
-        "next_level": 5000 # 50.00 USD
-    }
-
-    amount = tier_prices.get(tier, 0)
-
-    # Si es el nivel de Clon o niveles superiores donde aplica la regla 80/20
-    if tier in ["1", "2", "3", "clon"]:
-        # Simulación del cálculo de la regalía de la agencia central
-        total_generado_por_clon = 10000 # Ejemplo: $100.00 USD generados por el clon
-        comision_bunker_central = total_generado_por_clon * 0.20 # 20% para nosotros
-        ganancia_usuario = total_generado_por_clon * 0.80       # 80% para ellos
-        
-        return jsonify({
-            "status": "clon_active",
-            "tier": tier,
-            "rule": "80/20 Split Active",
-            "agency_royalties_20_percent": f"${comision_bunker_central/100} USD",
-            "user_payout_80_percent": f"${ganancia_usuario/100} USD",
-            "message": "Contrato inteligente del sistema clon verificado con éxito."
-        })
-
-    # Procesar pagos normales de suscripción via Stripe
-    if amount > 0 and via == "stripe":
-        if not stripe or not stripe.api_key:
-            return jsonify({"status": "error", "message": "Stripe Engine Offline"}), 500
-        try:
-            session = stripe.checkout.Session.create(
-                payment_method_types=['card'],
-                line_items=[{
-                    'price_data': {
-                        'currency': 'usd',
-                        'product_data': {'name': f'BETH OS - Suscripción Nivel {tier.upper()}'},
-                        'unit_amount': amount,
-                    },
-                    'quantity': 1,
-                }],
-                mode='payment',
-                success_url=request.host_url + '?payment=success',
-                cancel_url=request.host_url + '?payment=cancel',
-            )
-            return redirect(session.url, code=303)
-        except Exception as e:
-            return jsonify({"status": str(e)}), 500
-
+    # 4. Orquestación de módulos financieros y satélites
     return jsonify({
-        "status": "active",
-        "tier": tier,
-        "amount_charged": f"${amount/100} USD",
-        "message": "Nivel gratuito o interno procesado por el Robot Manager."
+        "welcome_message": "Welcome to the Real World Cyber universal smart system",
+        "brand": "US SS - by Lisa Beth Figueroa",
+        "assigned_engine": os_engine,
+        "infrastructure": {
+            "industry_vertical": industry,
+            "allocated_prototype": assigned_hardware,
+            "server_status": "PROVISIONED_ONLINE",
+            "revenue_split": split_rule,
+            "system_tier_status": status
+        },
+        "satellites": {
+            "credit_repair_hub": "Account open / Ready for processing",
+            "fintech_bridge": "MoneyLion Integrated API check",
+            "media_stream": "Radio & TV 24/7 broadcast pipeline connected",
+            "withdrawal_crypto_gateway": "Crypto Wallet Node Active"
+        }
     })
 
 if __name__ == '__main__':
