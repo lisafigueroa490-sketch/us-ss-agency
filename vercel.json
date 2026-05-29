@@ -1,1 +1,15 @@
-{"builds": [{"src": "by_lisa_beth_figueroa.py", "use": "@vercel/python"}], "routes": [{"src": "/(.*)", "dest": "by_lisa_beth_figueroa.py"}]}
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "by_lisa_beth_figueroa.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "by_lisa_beth_figueroa.py"
+    }
+  ]
+}

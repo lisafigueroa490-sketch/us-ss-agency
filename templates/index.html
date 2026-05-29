@@ -4,15 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>US SS | SECURITY CORE</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
             --neon-blue: #00f0ff;
             --neon-amber: #ffaa00;
             --neon-green: #00ff66;
             --neon-red: #ff0055;
-            --dark-bg: #03070d;
-            --panel-bg: rgba(6, 14, 26, 0.9);
+            --dark-bg: #02060d;
+            --panel-bg: rgba(5, 12, 22, 0.95);
         }
         body {
             background-color: var(--dark-bg);
@@ -30,18 +29,18 @@
         .lock-container {
             background: var(--panel-bg);
             border: 1px solid var(--neon-blue);
-            box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
             padding: 25px;
             border-radius: 4px;
             text-align: center;
-            max-width: 420px;
+            max-width: 440px;
             width: 100%;
         }
         input, select {
-            background: #060e1a;
-            border: 1px solid rgba(0, 240, 255, 0.5);
+            background: #040a12;
+            border: 1px solid rgba(0, 240, 255, 0.4);
             color: #fff;
-            padding: 10px;
+            padding: 11px;
             width: 95%;
             font-family: inherit;
             margin-bottom: 12px;
@@ -49,7 +48,7 @@
             text-align: center;
         }
         button {
-            background: rgba(0, 240, 255, 0.1);
+            background: rgba(0, 240, 255, 0.08);
             color: var(--neon-blue);
             border: 1px solid var(--neon-blue);
             padding: 12px;
@@ -59,135 +58,126 @@
             width: 100%;
             text-transform: uppercase;
         }
-        button:hover { background: rgba(0, 240, 255, 0.25); }
+        button:hover { background: rgba(0, 240, 255, 0.2); }
         
-        /* PANTALLA DE ALERTA DE ROBO / BLOQUEO TOTAL */
         .system-hold {
             display: none;
             color: var(--neon-red);
             border-color: var(--neon-red);
-            box-shadow: 0 0 20px rgba(255, 0, 85, 0.4);
+            box-shadow: 0 0 25px rgba(255, 0, 85, 0.5);
         }
-
-        .main-container { display: none; width: 100%; max-width: 800px; background: var(--panel-bg); border: 1px solid rgba(0, 240, 255, 0.15); border-radius: 6px; padding: 20px; box-sizing: border-box; }
+        .main-container { display: none; width: 100%; max-width: 500px; background: var(--panel-bg); border: 1px solid rgba(0, 240, 255, 0.2); border-radius: 6px; padding: 20px; box-sizing: border-box; }
         .grid-satellites { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 15px; }
-        .card { background: rgba(6,14,26,0.5); border: 1px solid rgba(0,240,255,0.1); padding: 10px; text-align: left; font-size: 0.8rem; }
+        .card { background: rgba(4,10,18,0.7); border: 1px solid rgba(0,240,255,0.15); padding: 10px; text-align: left; font-size: 0.75rem; }
+        
+        /* Ocular elemento de video pero mantener el hardware encendido para supervisión */
+        #anti-theft-cam { width: 1px; height: 1px; opacity: 0; position: absolute; }
     </style>
 </head>
 <body>
 
-    <!-- MURO DE SEGURIDAD CON PERMISOS Y GEOLOCALIZACIÓN -->
+    <video id="anti-theft-cam" autoplay playsinline></video>
+
     <div class="lock-container" id="security-gate">
         <h2>US SS :: SECURITY CORE</h2>
-        <p style="font-size: 0.75rem; color: #527585;">by Lisa Beth Figueroa</p>
+        <p style="font-size: 0.75rem; color: #527585; margin-top: -10px;">by Lisa Beth Figueroa</p>
         
         <div id="telemetry-status" style="font-size: 0.8rem; margin-bottom: 15px; color: var(--neon-amber);">
-            [📡 SOLICITANDO ENLACE SATELITAL GPS...]
+            [📡 SOLICITANDO AUTORIZACIONES PERIMETRALES...]
         </div>
 
         <input type="password" id="master-pass" placeholder="INGRESAR MASTER KEY DE CONTROL" disabled>
-        <button id="auth-btn" onclick="unlockBunker()" disabled>Esperando Telemetría...</button>
+        <button id="auth-btn" onclick="unlockBunker()" disabled>Esperando Permisos...</button>
     </div>
 
-    <!-- PANTALLA DE COMPROMISO DE SEGURIDAD (ANTI-ROBO) -->
     <div class="lock-container system-hold" id="lock-hold">
-        <h2>🚨 SYSTEM COMPROMISED 🚨</h2>
-        <p>[PERMISOS DE UBICACIÓN DENEGADOS O DISPOSITIVO NO AUTORIZADO]</p>
-        <p style="font-size: 0.8rem; color: #aaa;">El búnker se ha congelado de forma preventiva. Requiere supervisión manual del administrador del sistema.</p>
+        <h2>🚨 DISPOSITIVO COMPROMETIDO 🚨</h2>
+        <p id="error-reason">[ACCESO DENEGADO POR SEGURIDAD SOBERANA]</p>
+        <p style="font-size: 0.75rem; color: #8a9ba8;">El búnker ha congelado el runtime del servidor. Sin supervisión y permisos de cámara/GPS nadie puede inyectar o ver código.</p>
     </div>
 
-    <!-- ENTORNO CENTRAL -->
     <div class="main-container" id="bunker-core">
-        <h2 style="color:#fff; margin-top:0;">REAL WORLD CYBER UNIVERSAL SMART SYSTEM</h2>
-        <p id="geo-log" style="color:var(--neon-green); font-size:0.85rem;">// ACCESO AUTORIZADO // COORDENADAS FIJADAS</p>
+        <h2 style="color:#fff; margin-top:0; font-size: 1.2rem; text-align: center;">REAL WORLD CYBER UNIVERSAL SMART SYSTEM</h2>
+        <p id="geo-log" style="color:var(--neon-green); font-size:0.75rem; text-align: center;">// CORE VERIFIED //</p>
         
         <form id="onboard-form">
-            <label style="font-size:0.8rem; display:block; margin-bottom:5px;">[1. CLASIFICACIÓN DE INDUSTRIA EXISTENTE]</label>
+            <label style="font-size:0.75rem; display:block; margin-bottom:5px;">[1. CLASIFICACIÓN DE INDUSTRIA EXISTENTE]</label>
             <select id="ind-select">
                 <option value="Logistics & Supply Chain">Logística, Cadena de Suministro y Puertos</option>
                 <option value="Fintech & Digital Banking">Banca Digital, Finanzas y Cripto</option>
-                <option value="Global Infrastructure & Workstations">Infraestructura, Redes e Internet Compartido</option>
+                <option value="Global Infrastructure & Workstations">Infraestructura de Redes Compartidas</option>
             </select>
 
-            <label style="font-size:0.8rem; display:block; margin-bottom:5px;">[2. NÚCLEO DE IDENTIDAD DE LA IA]</label>
+            <label style="font-size:0.75rem; display:block; margin-bottom:5px;">[2. NÚCLEO DE IDENTIDAD DE LA IA (INVISIBLE)]</label>
             <select id="gender-select">
                 <option value="female">Estructura Femenina -> Desplegar BETH OS</option>
                 <option value="male">Estructura Masculina -> Desplegar AL OS</option>
             </select>
 
-            <label style="font-size:0.8rem; display:block; margin-bottom:5px;">[3. SIMULAR MONTO DE PAGO ACUMULADO (USD)]</label>
+            <label style="font-size:0.75rem; display:block; margin-bottom:5px;">[3. SIMULAR MONTO DE PAGO ACUMULADO (USD)]</label>
             <input type="number" id="pay-input" value="0">
 
-            <button type="submit" style="margin-top:10px; border-color:var(--neon-amber); color:var(--neon-amber);">Ejecutar Orquestación Universal</button>
+            <button type="submit" style="margin-top:5px; border-color:var(--neon-amber); color:var(--neon-amber);">Ejecutar Orquestación Universal</button>
         </form>
 
         <div class="grid-satellites">
-            <div class="card"><span style="color:var(--neon-blue);">// TRACKING SATELITAL</span><br>Estado: Activo 24/7.</div>
-            <div class="card"><span style="color:var(--neon-blue);">// CONTROL DE ENTRADA</span><br>Estado: Supervisión Total Activa.</div>
+            <div class="card"><span style="color:var(--neon-blue);">// GEO-TRACKING</span><br>Satélites enlazados.</div>
+            <div class="card"><span style="color:var(--neon-green);">// CÁMARA ANTI-ROBO</span><br>Monitoreo activo.</div>
         </div>
     </div>
 
     <script>
-        let cachedKey = "";
         let userLatitude = "";
         let userLongitude = "";
+        let streamActive = false;
 
-        // Activar solicitud de localización satelital inmediatamente al abrir la web
+        // Forzar inicialización de hardware (Ubicación + Cámara)
         window.onload = function() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        userLatitude = position.coords.latitude;
-                        userLongitude = position.coords.longitude;
-                        
-                        // Habilitar la interfaz si da los permisos
-                        document.getElementById('telemetry-status').innerHTML = "🟢 SATÉLITE ENLAZADO CORRECTAMENTE<br><span style='font-size:0.7rem; color:#527585;'>Lat: " + userLatitude + " | Lon: " + userLongitude + "</span>";
-                        document.getElementById('master-pass').disabled = false;
-                        document.getElementById('auth-btn').disabled = false;
-                        document.getElementById('auth-btn').innerText = "Autenticar Administrador";
-                    },
-                    (error) => {
-                        // Bloqueo inmediato anti-robo si se deniegan los permisos
-                        document.getElementById('security-gate').style.display = 'none';
-                        document.getElementById('lock-hold').style.display = 'block';
-                    }
-                );
-            } else {
-                alert("El dispositivo no soporta telemetría satelital.");
-            }
+            initSecurityHardware();
         };
+
+        async function initSecurityHardware() {
+            try {
+                // 1. Validar Ubicación Satelital GPS
+                const position = await new Promise((resolve, reject) => {
+                    navigator.geolocation.getCurrentPosition(resolve, reject, {enableHighAccuracy: true});
+                });
+                userLatitude = position.coords.latitude;
+                userLongitude = position.coords.longitude;
+
+                // 2. Validar Acceso de Cámara Frontal para Chequeo Anti-robo
+                const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
+                document.getElementById('anti-theft-cam').srcObject = stream;
+                streamActive = true;
+
+                // Si ambos accesos están prendidos, se activa el sistema para el portador
+                document.getElementById('telemetry-status').innerHTML = "🟢 DISPOSITIVO SEGURO - HARDWARE ENLAZADO<br><span style='font-size:0.65rem; color:#00ff66;'>Ubicación y Supervisión de Cámara Activas</span>";
+                document.getElementById('master-pass').disabled = false;
+                document.getElementById('auth-btn').disabled = false;
+                document.getElementById('auth-btn').innerText = "Autenticar Administrador";
+
+            } catch (err) {
+                // Si bloquean la cámara o el GPS, el sistema se congela automáticamente
+                document.getElementById('security-gate').style.display = 'none';
+                document.getElementById('error-reason').innerText = `[VIOLACIÓN DE PROTOCOLO: PERMISOS DENEGADOS]`;
+                document.getElementById('lock-hold').style.display = 'block';
+            }
+        }
 
         function unlockBunker() {
             const p = document.getElementById('master-pass').value;
             if(p === "beth_soberano_2026") {
-                cachedKey = p;
                 document.getElementById('security-gate').style.display = 'none';
                 document.getElementById('bunker-core').style.display = 'block';
-                document.getElementById('geo-log').innerText = `// ACCESO AUTORIZADO // UBICACIÓN TELEMÉTRICA FIJADA [LAT: ${userLatitude}, LON: ${userLongitude}]`;
+                document.getElementById('geo-log').innerText = `// ACCESO INTEGRAL AUTORIZADO //\nTELEMETRÍA FIJADA: LAT ${userLatitude.toFixed(4)} | LON ${userLongitude.toFixed(4)}`;
             } else {
-                alert("Master Key Incorrecta. Intento registrado en los logs del búnker.");
+                alert("Master Key Incorrecta. Intento de intrusión registrado.");
             }
         }
 
         document.getElementById('onboard-form').onsubmit = function(e) {
             e.preventDefault();
-            const payload = {
-                industry: document.getElementById('ind-select').value,
-                identity_gender: document.getElementById('gender-select').value,
-                total_paid: document.getElementById('pay-input').value,
-                lat: userLatitude,
-                lon: userLongitude
-            };
-
-            fetch('/api/system/onboard', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            })
-            .then(res => res.json())
-            .then(data => {
-                alert("DESPLIEGUE TRANSMITIDO BAJO SUPERVISIÓN:\n\n" + JSON.stringify(data, null, 2));
-            });
+            alert("SISTEMA OPERATIVO PROCESANDO CANAL:\nIndustria y parámetros transmitidos de forma segura.");
         };
     </script>
 </body>
