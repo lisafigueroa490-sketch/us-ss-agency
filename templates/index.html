@@ -27,7 +27,6 @@
             justify-content: center;
         }
 
-        /* CONFIGURACIÓN DEL MURO DE SEGURIDAD */
         .lock-container {
             background: var(--panel-bg);
             border: 1px solid var(--neon-blue);
@@ -64,7 +63,6 @@
 
         button:hover { background: rgba(0, 240, 255, 0.25); }
 
-        /* EL PANEL INTEGRAL OCULTO POR DEFECTO */
         .main-container {
             display: none;
             width: 100%;
@@ -92,6 +90,7 @@
 </head>
 <body>
 
+    <!-- COMPUERTA DE ENTRADA -->
     <div class="lock-container" id="security-gate">
         <h2>BETH OS :: SECURITY GATE</h2>
         <p style="font-size: 0.8rem; color: #527585;">[SERVIDOR EN MODO PRIVADO UNTIL PROFIT]</p>
@@ -100,9 +99,10 @@
         <button onclick="unlockBunker()">ACCEDER</button>
     </div>
 
+    <!-- PANEL CENTRAL -->
     <div class="main-container" id="bunker-core">
         <h2 style="color: #fff; text-shadow: 0 0 8px var(--neon-blue);">BETH OS / SYSTEM MULTI-TIER</h2>
-        <p style="color: var(--neon-green); font-size: 0.9rem;">⚡ CREDENCIALES DE ADMIN VERIFICADAS</p>
+        <p style="color: var(--neon-green); font-size: 0.9rem;">⚡ ENTORNO DE OPERACIÓN EXCLUSIVO</p>
         
         <form action="/api/finance/manager" method="POST" id="tier-form">
             <label for="tier" style="display:block; margin-bottom:10px; font-size:0.8rem;">[SELECCIONAR ESCALAFÓN DE ACCESO]</label>
@@ -115,54 +115,23 @@
                 <option value="1">Level 1 (80/20 Clone System)</option>
             </select>
             
-            <button type="submit" style="width:100%; padding:12px; background:rgba(0,240,255,0.1);">Activar Módulo y Procesar Canal</button>
+            <button type="submit" style="width:100%; padding:12px; background:rgba(0,240,255,0.1); color: var(--neon-blue); border: 1px solid var(--neon-blue); font-family:inherit;">Activar Módulo y Procesar Canal</button>
         </form>
     </div>
 
     <script>
-        let cachedKey = "";
-
         function unlockBunker() {
             const p = document.getElementById('master-pass').value;
             
-            fetch('/api/auth/verify', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({password: p})
-            })
-            .then(res => {
-                if(res.ok) {
-                    cachedKey = p; // Guardamos la clave en memoria local
-                    alert("CONEXIÓN ESTABLECIDA. Redirigiendo al centro de mando...");
-                    
-                    // Ocultamos la puerta y mostramos el búnker real
-                    document.getElementById('security-gate').style.display = 'none';
-                    document.getElementById('bunker-core').style.display = 'block';
-                } else {
-                    alert("ACCESO DENEGADO: Llave inválida.");
-                }
-            });
+            // Verificación directa en local para evitar retrasos del servidor
+            if (p === "beth_soberano_2026") {
+                alert("CONEXIÓN ESTABLECIDA LOCALMENTE. Desplegando controles...");
+                document.getElementById('security-gate').style.display = 'none';
+                document.getElementById('bunker-core').style.display = 'block';
+            } else {
+                alert("ACCESO DENEGADO: Llave inválida.");
+            }
         }
-
-        // Interceptar el envío del formulario para meter la clave en las cabeceras por seguridad
-        document.getElementById('tier-form').onsubmit = function(e) {
-            e.preventDefault();
-            const tierVal = document.getElementById('tier').value;
-            
-            fetch('/api/finance/manager', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Bunker-Key': cachedKey
-                },
-                body: JSON.stringify({ gateway: 'stripe', tier: tierVal })
-            })
-            .then(res => res.json())
-            .then(data => {
-                alert("Respuesta del Robot Manager:\n" + JSON.stringify(data, null, 2));
-                if(data.url) window.location.href = data.url;
-            });
-        };
     </script>
 </body>
 </html>
