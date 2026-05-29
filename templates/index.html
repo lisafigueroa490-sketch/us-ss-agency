@@ -4,13 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BETH OS | SMART COMMAND CENTER</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
             --neon-blue: #00f0ff;
             --neon-amber: #ffaa00;
             --neon-green: #00ff66;
             --dark-bg: #03070d;
-            --panel-bg: rgba(6, 14, 26, 0.85);
+            --panel-bg: rgba(6, 14, 26, 0.9);
             --border-glow: rgba(0, 240, 255, 0.25);
         }
 
@@ -61,6 +62,38 @@
             margin-top: 0;
             color: #ffffff;
             text-shadow: 0 0 8px var(--neon-blue);
+        }
+
+        /* PANEL DE CONTABILIDAD TÁCTICA */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .metric-card {
+            background: rgba(0, 240, 255, 0.02);
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            padding: 15px;
+            border-radius: 4px;
+            text-align: left;
+        }
+
+        .metric-val {
+            font-size: 1.6rem;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        /* MONITOR DE GRÁFICAS */
+        .chart-container {
+            background: #060e1a;
+            border: 1px dashed rgba(0, 240, 255, 0.3);
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+            display: none; /* Se activa al presionar [MONITOR] */
         }
 
         .grid-buttons {
@@ -124,31 +157,88 @@
         // ASSETS_INDEX <br>
         Drive_DataCONNECTED | Vault_APIsARMED <br>
         <span class="cyan-text">SYS_LEVEL :: v2.6_ASYM</span>
-        <form id="pay-form" action="/api/checkout" method="POST" style="display:none;"></form>
     </div>
 
     <div class="main-container">
         <h1>BETH OS / SMART COMMAND CENTER</h1>
         
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <span class="cyan-text">// BALANCE TOTAL</span>
+                <div class="metric-val">$0.00 USD</div>
+            </div>
+            <div class="metric-card" style="border-color: rgba(255,170,0,0.2);">
+                <span class="amber-text">// COIN VAULT</span>
+                <div class="metric-val">0.000 BTC</div>
+            </div>
+        </div>
+
+        <div id="monitor-panel" class="chart-container">
+            <span class="cyan-text">// MATRIX ANALYTICS FLUX</span>
+            <canvas id="financeChart" style="width:100%; height:200px; margin-top:10px;"></canvas>
+        </div>
+
         <div class="grid-buttons">
-            <button class="matrix-btn" onclick="alert('Accediendo al Monitor de Matriz...')">[MONITOR]</button>
+            <button class="matrix-btn" onclick="toggleMonitor()">[MONITOR]</button>
             <button class="matrix-btn" onclick="alert('Desplegando lista de Agentes Autónomos...')">[AGENTES]</button>
             <button class="matrix-btn btn-amber" onclick="alert('Wise Invoice: ' + JSON.stringify({gateway: 'wise', profile: 'lisaf1339'}))">[FINANZAS]</button>
             <button class="matrix-btn btn-amber" onclick="document.getElementById('pay-form').submit()">[DONACIONES]</button>
             <button class="matrix-btn" onclick="alert('Cargando Codex Soberano de Datos...')">[CODEX]</button>
             <button class="matrix-btn" onclick="alert('Abriendo Repositorio de Proyectos...')">[PROJECTS/EVERYTHING]</button>
-        <form id="pay-form" action="/api/checkout" method="POST" style="display:none;"></form>
         </div>
+
+        <form id="pay-form" action="/api/finance/manager" method="POST" style="display:none;">
+            <input type="hidden" name="gateway" value="stripe">
+            <input type="hidden" name="amount" value="2500">
+        </form>
 
         <div class="footer-device">
             DEVICE_DATA: Pixel 8 (Google)<br>
             SYSTEM_VERSION: CP1A.260405.005<br>
-            BASEBAND: g5300i-251202-260127-B-14784800<br>
             STATUS: SECURE SERVERLESS CLOUD RUNTIME (Vercel Verified)
-        <form id="pay-form" action="/api/checkout" method="POST" style="display:none;"></form>
         </div>
-        <form id="pay-form" action="/api/checkout" method="POST" style="display:none;"></form>
     </div>
 
+    <script>
+        // Función para ocultar/mostrar el módulo de Gráficas interactivo
+        function toggleMonitor() {
+            var panel = document.getElementById('monitor-panel');
+            if (panel.style.display === 'none' || panel.style.display === '') {
+                panel.style.display = 'block';
+                initChart();
+            } else {
+                panel.style.display = 'none';
+            }
+        }
+
+        // Configuración y renderizado de la gráfica de flujos financieros
+        let chartInstance = null;
+        function initChart() {
+            if (chartInstance) return; // Evitar duplicados
+            const ctx = document.getElementById('financeChart').getContext('2d');
+            chartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00'],
+                    datasets: [{
+                        label: 'Flujo de Transacciones ($)',
+                        data: [0, 0, 0, 0, 0, 0], // Inicia en ceros reales hasta recibir transacciones de clientes
+                        borderColor: '#00f0ff',
+                        backgroundColor: 'rgba(0, 240, 255, 0.05)',
+                        borderWidth: 2,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#527585' } },
+                        y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#527585' } }
+                    }
+                }
+            });
+        }
+    </script>
 </body>
 </html>
