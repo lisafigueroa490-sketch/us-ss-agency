@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BETH OS | SMART COMMAND CENTER</title>
+    <title>BETH OS | SECURE GATE</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
@@ -13,17 +13,60 @@
             --dark-bg: #03070d;
             --panel-bg: rgba(6, 14, 26, 0.9);
         }
+
         body {
             background-color: var(--dark-bg);
             color: #d1f4ff;
             font-family: 'Courier New', Courier, monospace;
             margin: 0;
             padding: 15px;
+            box-sizing: border-box;
+            min-height: 100vh;
             display: flex;
-            flex-direction: column;
             align-items: center;
+            justify-content: center;
         }
+
+        /* CONFIGURACIÓN DEL MURO DE SEGURIDAD */
+        .lock-container {
+            background: var(--panel-bg);
+            border: 1px solid var(--neon-blue);
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+            padding: 30px;
+            border-radius: 4px;
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        input {
+            background: #060e1a;
+            border: 1px solid rgba(0, 240, 255, 0.5);
+            color: #fff;
+            padding: 10px;
+            width: 90%;
+            font-family: inherit;
+            text-align: center;
+            margin-bottom: 15px;
+            border-radius: 3px;
+        }
+
+        button {
+            background: rgba(0, 240, 255, 0.1);
+            color: var(--neon-blue);
+            border: 1px solid var(--neon-blue);
+            padding: 10px 20px;
+            font-family: inherit;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+
+        button:hover { background: rgba(0, 240, 255, 0.25); }
+
+        /* EL PANEL INTEGRAL OCULTO POR DEFECTO */
         .main-container {
+            display: none;
             width: 100%;
             max-width: 800px;
             background: var(--panel-bg);
@@ -33,8 +76,7 @@
             box-sizing: border-box;
             text-align: center;
         }
-        h1 { font-size: 1.4rem; letter-spacing: 3px; color: #fff; text-shadow: 0 0 8px var(--neon-blue); }
-        
+
         .tier-selector {
             background: rgba(0,240,255,0.05);
             border: 1px solid var(--neon-blue);
@@ -46,31 +88,23 @@
             border-radius: 4px;
         }
         option { background: #060e1a; color: #fff; }
-
-        .matrix-btn {
-            background: rgba(0, 240, 255, 0.03);
-            color: #a3e8ff;
-            border: 1px solid rgba(0, 240, 255, 0.3);
-            padding: 12px;
-            width: 100%;
-            font-family: inherit;
-            font-weight: bold;
-            cursor: pointer;
-            text-transform: uppercase;
-            margin-bottom: 10px;
-        }
-        .matrix-btn:hover {
-            background: rgba(0, 240, 255, 0.15);
-            border-color: var(--neon-blue);
-            box-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
-        }
     </style>
 </head>
 <body>
-    <div class="main-container">
-        <h1>BETH OS / SYSTEM MULTI-TIER</h1>
+
+    <div class="lock-container" id="security-gate">
+        <h2>BETH OS :: SECURITY GATE</h2>
+        <p style="font-size: 0.8rem; color: #527585;">[SERVIDOR EN MODO PRIVADO UNTIL PROFIT]</p>
+        <input type="password" id="master-pass" placeholder="INGRESAR MASTER KEY">
+        <br>
+        <button onclick="unlockBunker()">ACCEDER</button>
+    </div>
+
+    <div class="main-container" id="bunker-core">
+        <h2 style="color: #fff; text-shadow: 0 0 8px var(--neon-blue);">BETH OS / SYSTEM MULTI-TIER</h2>
+        <p style="color: var(--neon-green); font-size: 0.9rem;">⚡ CREDENCIALES DE ADMIN VERIFICADAS</p>
         
-        <form action="/api/finance/manager" method="POST">
+        <form action="/api/finance/manager" method="POST" id="tier-form">
             <label for="tier" style="display:block; margin-bottom:10px; font-size:0.8rem;">[SELECCIONAR ESCALAFÓN DE ACCESO]</label>
             <select name="tier" id="tier" class="tier-selector">
                 <option value="free">Tier Free ($0.00)</option>
@@ -79,12 +113,56 @@
                 <option value="high">High Level ($15.00)</option>
                 <option value="next_level">Next Level ($50.00)</option>
                 <option value="1">Level 1 (80/20 Clone System)</option>
-                <option value="2">Level 2 (80/20 Clone System)</option>
-                <option value="3">Level 3 (80/20 Clone System)</option>
             </select>
             
-            <button type="submit" class="matrix-btn">Activar Módulo y Procesar Canal</button>
+            <button type="submit" style="width:100%; padding:12px; background:rgba(0,240,255,0.1);">Activar Módulo y Procesar Canal</button>
         </form>
     </div>
+
+    <script>
+        let cachedKey = "";
+
+        function unlockBunker() {
+            const p = document.getElementById('master-pass').value;
+            
+            fetch('/api/auth/verify', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({password: p})
+            })
+            .then(res => {
+                if(res.ok) {
+                    cachedKey = p; // Guardamos la clave en memoria local
+                    alert("CONEXIÓN ESTABLECIDA. Redirigiendo al centro de mando...");
+                    
+                    // Ocultamos la puerta y mostramos el búnker real
+                    document.getElementById('security-gate').style.display = 'none';
+                    document.getElementById('bunker-core').style.display = 'block';
+                } else {
+                    alert("ACCESO DENEGADO: Llave inválida.");
+                }
+            });
+        }
+
+        // Interceptar el envío del formulario para meter la clave en las cabeceras por seguridad
+        document.getElementById('tier-form').onsubmit = function(e) {
+            e.preventDefault();
+            const tierVal = document.getElementById('tier').value;
+            
+            fetch('/api/finance/manager', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Bunker-Key': cachedKey
+                },
+                body: JSON.stringify({ gateway: 'stripe', tier: tierVal })
+            })
+            .then(res => res.json())
+            .then(data => {
+                alert("Respuesta del Robot Manager:\n" + JSON.stringify(data, null, 2));
+                if(data.url) window.location.href = data.url;
+            });
+        };
+    </script>
 </body>
 </html>
