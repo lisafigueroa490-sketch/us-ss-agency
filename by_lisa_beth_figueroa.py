@@ -1,16 +1,12 @@
 import os
-from flask import Flask, jsonify, request
+from flask import Flask, render_template, jsonify, request
 
 app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return jsonify({
-        "status": "online",
-        "bunker": "us-ss-agency",
-        "message": "Bunker Autonomo Humanless Activo",
-        "engine": "Gemini API Key Conectada con Exito"
-    })
+    # Ahora le decimos a Flask que cargue la interfaz visual que creamos arriba
+    return render_template('index.html')
 
 @app.route('/api/chat', methods=['POST'])
 def chat():
