@@ -124,6 +124,7 @@
         // ASSETS_INDEX <br>
         Drive_DataCONNECTED | Vault_APIsARMED <br>
         <span class="cyan-text">SYS_LEVEL :: v2.6_ASYM</span>
+        <form id="pay-form" action="/api/checkout" method="POST" style="display:none;"></form>
     </div>
 
     <div class="main-container">
@@ -133,9 +134,10 @@
             <button class="matrix-btn" onclick="alert('Accediendo al Monitor de Matriz...')">[MONITOR]</button>
             <button class="matrix-btn" onclick="alert('Desplegando lista de Agentes Autónomos...')">[AGENTES]</button>
             <button class="matrix-btn btn-amber" onclick="alert('Módulo de Finanzas: Enlace listo.')">[FINANZAS]</button>
-            <button class="matrix-btn btn-amber" onclick="alert('Abriendo pasarela comercial...')">[DONACIONES]</button>
+            <button class="matrix-btn btn-amber" onclick="document.getElementById('pay-form').submit()">[DONACIONES]</button>
             <button class="matrix-btn" onclick="alert('Cargando Codex Soberano de Datos...')">[CODEX]</button>
             <button class="matrix-btn" onclick="alert('Abriendo Repositorio de Proyectos...')">[PROJECTS/EVERYTHING]</button>
+        <form id="pay-form" action="/api/checkout" method="POST" style="display:none;"></form>
         </div>
 
         <div class="footer-device">
@@ -143,7 +145,9 @@
             SYSTEM_VERSION: CP1A.260405.005<br>
             BASEBAND: g5300i-251202-260127-B-14784800<br>
             STATUS: SECURE SERVERLESS CLOUD RUNTIME (Vercel Verified)
+        <form id="pay-form" action="/api/checkout" method="POST" style="display:none;"></form>
         </div>
+        <form id="pay-form" action="/api/checkout" method="POST" style="display:none;"></form>
     </div>
 
 </body>
