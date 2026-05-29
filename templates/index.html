@@ -3,99 +3,148 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>US-SS-AGENCY | Dashboard</title>
+    <title>BETH OS | SMART COMMAND CENTER</title>
     <style>
+        :root {
+            --neon-blue: #00f0ff;
+            --neon-amber: #ffaa00;
+            --neon-green: #00ff66;
+            --dark-bg: #03070d;
+            --panel-bg: rgba(6, 14, 26, 0.85);
+            --border-glow: rgba(0, 240, 255, 0.25);
+        }
+
         body {
-            background-color: #0a0a0c;
-            color: #e2e8f0;
+            background-color: var(--dark-bg);
+            color: #d1f4ff;
             font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 15px;
+            box-sizing: border-box;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            margin: 0;
+        }
+
+        .matrix-header {
+            width: 100%;
+            max-width: 800px;
+            background: var(--panel-bg);
+            border: 1px solid var(--neon-blue);
+            box-shadow: 0 0 15px var(--border-glow);
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+
+        .cyan-text { color: var(--neon-blue); }
+        .amber-text { color: var(--neon-amber); }
+        .green-text { color: var(--neon-green); }
+
+        .main-container {
+            width: 100%;
+            max-width: 800px;
+            background: var(--panel-bg);
+            border: 1px solid rgba(0, 240, 255, 0.15);
+            border-radius: 6px;
             padding: 20px;
             box-sizing: border-box;
         }
-        .container {
-            max-width: 600px;
-            width: 100%;
-            background: #111115;
-            border: 1px solid #22222a;
-            border-radius: 8px;
-            padding: 30px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.8);
-            text-align: center;
-        }
+
         h1 {
-            color: #38bdf8;
-            font-size: 1.8rem;
-            letter-spacing: 2px;
-            margin-bottom: 5px;
+            font-size: 1.4rem;
+            text-align: center;
+            letter-spacing: 3px;
+            margin-top: 0;
+            color: #ffffff;
+            text-shadow: 0 0 8px var(--neon-blue);
         }
-        .status-badge {
-            display: inline-block;
-            background-color: rgba(34, 197, 94, 0.1);
-            color: #22c55e;
-            padding: 5px 15px;
-            border-radius: 20px;
+
+        .grid-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        @media(min-width: 600px) {
+            .grid-buttons { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        .matrix-btn {
+            background: rgba(0, 240, 255, 0.03);
+            color: #a3e8ff;
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            padding: 12px 5px;
+            font-family: inherit;
             font-size: 0.8rem;
             font-weight: bold;
-            border: 1px solid rgba(34, 197, 94, 0.3);
-            margin-bottom: 25px;
-        }
-        .panel {
-            background: #070709;
-            border: 1px solid #1c1c24;
-            padding: 15px;
-            border-radius: 6px;
-            text-align: left;
-            margin-bottom: 25px;
-            font-size: 0.9rem;
-        }
-        .panel p { margin: 8px 0; }
-        .accent { color: #f59e0b; }
-        .btn-group {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 12px;
-        }
-        button {
-            background: #38bdf8;
-            color: #000;
-            border: none;
-            padding: 12px;
-            border-radius: 4px;
-            font-family: inherit;
-            font-weight: bold;
+            text-transform: uppercase;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: all 0.2s ease;
+            border-radius: 3px;
         }
-        button:hover { background: #0ea5e9; }
-        button.secondary {
-            background: #1e293b;
-            color: #cbd5e1;
-            border: 1px solid #334155;
+
+        .matrix-btn:hover {
+            background: rgba(0, 240, 255, 0.15);
+            color: #ffffff;
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+            border-color: var(--neon-blue);
         }
-        button.secondary:hover { background: #334155; }
+
+        .btn-amber {
+            border-color: rgba(255, 170, 0, 0.4);
+            color: #ffe6b3;
+        }
+        .btn-amber:hover {
+            background: rgba(255, 170, 0, 0.15);
+            box-shadow: 0 0 10px rgba(255, 170, 0, 0.5);
+            border-color: var(--neon-amber);
+        }
+
+        .footer-device {
+            margin-top: 25px;
+            font-size: 0.7rem;
+            color: #527585;
+            border-top: 1px dashed rgba(0, 240, 255, 0.1);
+            padding-top: 10px;
+            line-height: 1.5;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>US-SS-AGENCY</h1>
-        <div class="status-badge">⚡ CORE ONLINE</div>
+
+    <div class="matrix-header">
+        <span class="green-text">NODE_PIXEL_8_LIVE</span><br>
+        // MONITOR_MATRIX <br>
+        🌐 <span class="cyan-text">ECOSYSTEM01</span> 🤖 <span class="amber-text">AI_AGENTS02</span><br>
+        // ASSETS_INDEX <br>
+        Drive_DataCONNECTED | Vault_APIsARMED <br>
+        <span class="cyan-text">SYS_LEVEL :: v2.6_ASYM</span>
+    </div>
+
+    <div class="main-container">
+        <h1>BETH OS / SMART COMMAND CENTER</h1>
         
-        <div class="panel">
-            <p><strong>SISTEMA:</strong> <span class="accent">Búnker Autónomo Humanless</span></p>
-            <p><strong>CONEXIÓN:</strong> Motor Gemini AI Vinculado</p>
-            <p><strong>ENTORNO:</strong> Producción Global Activa</p>
+        <div class="grid-buttons">
+            <button class="matrix-btn" onclick="alert('Accediendo al Monitor de Matriz...')">[MONITOR]</button>
+            <button class="matrix-btn" onclick="alert('Desplegando lista de Agentes Autónomos...')">[AGENTES]</button>
+            <button class="matrix-btn btn-amber" onclick="alert('Módulo de Finanzas: Enlace listo.')">[FINANZAS]</button>
+            <button class="matrix-btn btn-amber" onclick="alert('Abriendo pasarela comercial...')">[DONACIONES]</button>
+            <button class="matrix-btn" onclick="alert('Cargando Codex Soberano de Datos...')">[CODEX]</button>
+            <button class="matrix-btn" onclick="alert('Abriendo Repositorio de Proyectos...')">[PROJECTS/EVERYTHING]</button>
         </div>
 
-        <div class="btn-group">
-            <button onclick="alert('Iniciando enlace con la IA...')">Acceder al Canal IA</button>
-            <button class="secondary" onclick="alert('Pasarela de cobro en mantenimiento')">Procesar Pago Comercial</button>
+        <div class="footer-device">
+            DEVICE_DATA: Pixel 8 (Google)<br>
+            SYSTEM_VERSION: CP1A.260405.005<br>
+            BASEBAND: g5300i-251202-260127-B-14784800<br>
+            STATUS: SECURE SERVERLESS CLOUD RUNTIME (Vercel Verified)
         </div>
     </div>
+
 </body>
 </html>
