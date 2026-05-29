@@ -70,7 +70,7 @@
 
         .divider { border-top: 1px dashed rgba(0,240,255,0.2); margin: 20px 0; padding-top: 15px; }
 
-        /* SERVIDOR CENTRAL EXCLUSIVO ADMIN */
+        /* INTERFAZ CENTRAL MAIN SERVER */
         .main-container { display: none; width: 100%; max-width: 850px; background: var(--panel-bg); border: 1px solid rgba(0, 240, 255, 0.2); border-radius: 6px; padding: 20px; box-sizing: border-box; }
         .grid-buttons { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 15px; }
         @media(min-width: 600px) { .grid-buttons { grid-template-columns: repeat(3, 1fr); } }
@@ -79,7 +79,7 @@
         .btn-purple { border-color: var(--neon-purple); color: #f3d1ff; }
         .btn-amber { border-color: var(--neon-amber); color: #ffe6b3; }
 
-        /* CHAT TASKER INTEGRADOR */
+        /* ROBOT TASKER BOX */
         .chat-box { background: #040a12; border: 1px dashed rgba(0, 240, 255, 0.3); border-radius: 4px; height: 140px; overflow-y: auto; padding: 10px; text-align: left; font-size: 0.8rem; margin: 15px 0; box-sizing: border-box; }
         .msg-bot { color: var(--neon-green); margin-bottom: 5px; }
         .msg-user { color: #fff; margin-bottom: 5px; font-weight: bold; }
@@ -88,13 +88,13 @@
 </head>
 <body>
 
-    <!-- HARDWARE CAPTURA (CÁMARA ANTI-ROBO) -->
+    <!-- VIDEO CAPTURA INVISIBLE -->
     <video id="anti-theft-cam" autoplay playsinline style="width: 1px; height: 1px; opacity: 0; position: absolute;"></video>
 
     <!-- COMPUERTA GLOBAL DE ENTRADA -->
     <div class="lock-container" id="security-gate">
         
-        <!-- BIENVENIDA Y IDIOMAS EN LA CABECERA ABSOLUTA -->
+        <!-- SELECTOR DE IDIOMAS EN LA PARTE SUPERIOR -->
         <div style="text-align: right; margin-bottom: 15px;">
             <select id="lang-selector" onchange="changeGlobalLanguage()" style="width: auto; padding: 5px; font-size: 0.75rem; margin: 0; display: inline-block;">
                 <option value="es">🌐 Idioma: Español</option>
@@ -105,22 +105,23 @@
         <h2 id="lbl-title">US SS :: SECURITY CORE</h2>
         <p style="font-size: 0.75rem; color: #527585; margin-top: -10px;">by Lisa Beth Figueroa</p>
         
-        <div id="telemetry-status" style="font-size: 0.8rem; margin-bottom: 15px; color: var(--neon-green);">
-            🟢 DISPOSITIVO AUTORIZADO - HARDWARE EN ENLACE
+        <!-- TELEMETRÍA DINÁMICA -->
+        <div id="telemetry-status" style="font-size: 0.8rem; margin-bottom: 15px; color: var(--neon-amber);">
+            [📡 SOLICITANDO ENLACE SATELITAL...]
         </div>
 
-        <!-- CONFIGURACIÓN DE LOGIN ADMISTRADOR -->
+        <!-- LOGIN DE ADMINISTRACIÓN -->
         <select id="identity-select">
-            <option value="BETH">BETH OS (Núcleo Femenino Prototipo)</option>
-            <option value="AL">AL OS (Núcleo Masculino Prototipo)</option>
+            <option value="BETH" id="opt-beth">BETH OS (Núcleo Femenino Prototipo)</option>
+            <option value="AL" id="opt-al">AL OS (Masculino Prototipo)</option>
         </select>
         <input type="password" id="master-pass" placeholder="INGRESAR MASTER KEY">
         <button id="btn-login" onclick="unlockBunker()">[ INICIAR SESIÓN / CONNECT MASTER ]</button>
 
-        <!-- SECCIÓN DE SUSCRIPCIÓN PARA CLIENTES (DEBAJO) -->
+        <!-- MÓDULO DE SUSCRIPCIÓN INTERNACIONAL DEBAJO -->
         <div class="divider">
-            <h3 id="lbl-sub-title" style="color: var(--neon-amber); margin-top: 0; font-size: 0.85rem;">[MÓDULO DE REGISTRO DE SOCIOS COMERCIALES]</h3>
-            <p id="lbl-scraper-desc" style="font-size: 0.65rem; color: #8a9ba8; margin-top: -5px;">Conergence & Quantum Scrapers Active (Anti-VPN Location Verification)</p>
+            <h3 id="lbl-sub-title">[MÓDULO DE REGISTRO DE SOCIOS COMERCIALES]</h3>
+            <p id="lbl-scraper-desc">Convergence & Quantum Scrapers Active (Anti-VPN Location Verification)</p>
             
             <form id="client-form" onsubmit="registerClient(event)">
                 <input type="text" id="c-id" placeholder="ID / Identificación Legal" required>
@@ -129,88 +130,115 @@
                 <input type="text" id="c-tax" placeholder="SSN / EIN / Registro Fiscal" required>
                 
                 <select id="c-country">
-                    <option value="US">United States (Socio Fundador)</option>
-                    <option value="MX">México (Socio Estratégico)</option>
-                    <option value="BR">Brasil (Socio LATAM Hub)</option>
-                    <option value="RU">Rusia (Socio Tecnológico Quantum)</option>
-                    <option value="CN">China (Socio de Infraestructura)</option>
+                    <option value="US" id="opt-us">United States (Socio Fundador)</option>
+                    <option value="MX" id="opt-mx">México (Socio Estratégico)</option>
+                    <option value="BR" id="opt-br">Brasil (Socio LATAM Hub)</option>
+                    <option value="RU" id="opt-ru">Rusia (Socio Tecnológico Quantum)</option>
+                    <option value="CN" id="opt-cn">China (Socio de Infraestructura)</option>
                 </select>
-                <button type="submit" id="btn-subscribe" style="color: var(--neon-amber); border-color: var(--neon-amber);">Suscribirse al Sistema Global</button>
+                <button type="submit" id="btn-subscribe">Suscribirse al Sistema Global</button>
             </form>
         </div>
     </div>
 
-    <!-- CENTRAL SUPREMA RAÍZ (TU ENTORNO PRIVADO) -->
+    <!-- CENTRAL SUPREMA CENTRAL RAÍZ (TU PANEL) -->
     <div class="main-container" id="bunker-core">
-        <h1 id="core-header-title" style="color: #fff; text-shadow: 0 0 8px var(--neon-blue);">BETH OS / SYSTEM CENTRAL MAIN SERVER</h1>
-        <p id="txt-admin-subtitle" style="color: var(--neon-green); font-size: 0.85rem;">⚡ ENTORNO DE SUPERVISIÓN SUPREMA - OPERANDO EN PRIVADO</p>
+        <h1 id="core-header-title">BETH OS / SYSTEM CENTRAL MAIN SERVER</h1>
+        <p id="txt-admin-subtitle">⚡ ENTORNO DE SUPERVISIÓN SUPREMA - OPERANDO EN PRIVADO</p>
         
         <div class="ai-status-card" id="txt-telemetry-card">
-            <span style="color: var(--neon-blue); font-weight: bold;">// TELEMETRÍA GLOBAL QUANTUM INTEGRADA</span><br>
-            • Instancias de Clientes: Conectadas de forma remota a sub-servidores sandbox aislados.<br>
-            • Scrapers Activos: Analizando intención, propósito, audio, StreetView API y tracking satelital.<br>
-            • Telegram API Core: KARO_OS_ROBOT enlazado y monitoreando trayectoria.
+            <!-- Cargado por JavaScript dinámicamente -->
         </div>
 
+        <!-- CONTROL DE BOTONES ADAPTATIVOS -->
         <div class="grid-buttons">
-            <button onclick="alert('Monitor de Flujo de Red Activo.')">[MONITOR]</button>
-            <button onclick="alert('Visualizando Prototipos Activos...')">[AGENTES]</button>
-            <button class="btn-amber" onclick="alert('Acceso a Bóveda Wise: lisaf1339')">[FINANZAS]</button>
-            <button class="btn-amber" onclick="alert('Impuestos y Estructura Fiscal Sincronizada')">[DONACIONES]</button>
-            <button class="btn-purple" onclick="alert('Scrapers de Convergencia Cuántica Escuchando Intenciones...')">[SCRAPERS/INTENT]</button>
-            <button class="btn-purple" onclick="alert('Estatus de Droides Modulares en DMV y Armas...')">[DROID/DMV SKILLS]</button>
-            <button onclick="alert('Abriendo Codex de Seguridad...')">[CODEX]</button>
-            <button style="grid-column: span 2;" onclick="alert('Cargando Ecosistemas de Planetas Sintéticos...')">[PROJECTS/EVERYTHING/SYNTHETIC_PLANETS]</button>
+            <button id="btn-monitor" onclick="alert('Monitor Active')">[MONITOR]</button>
+            <button id="btn-agentes" onclick="alert('Agents Standby')">[AGENTES]</button>
+            <button id="btn-finanzas" class="btn-amber" onclick="alert('Vault: lisaf1339')">[FINANZAS]</button>
+            <button id="btn-donaciones" class="btn-amber" onclick="alert('Fiscal Core ready')">[DONACIONES]</button>
+            <button id="btn-scrapers" class="btn-purple" onclick="alert('Intent scrapers listening')">[SCRAPERS/INTENT]</button>
+            <button id="btn-droid" class="btn-purple" onclick="alert('DMV Skills ready')">[DROID/DMV SKILLS]</button>
+            <button id="btn-codex" onclick="alert('Sovereign Codex Secure')">[CODEX]</button>
+            <button id="btn-projects" style="grid-column: span 2;" onclick="alert('Loading Synthetic Ecosytems')">[PROJECTS/EVERYTHING/SYNTHETIC_PLANETS]</button>
         </div>
 
-        <!-- INTERFAZ COMPLETA DEL ROBOT CHAT TASKER DE TRAYECTORIA -->
+        <!-- ROBOT CHAT TASKER CON IDIOMA ADAPTATIVO TOTAL -->
         <fieldset style="border: 1px solid rgba(0, 240, 255, 0.25); border-radius: 4px; padding: 12px; margin-top: 20px;">
-            <legend id="txt-tasker-legend" style="font-size: 0.75rem; color: var(--neon-amber); padding: 0 5px;">[ROBOT CHAT TASKER V.01]</legend>
+            <legend id="txt-tasker-legend">[ROBOT CHAT TASKER V.01]</legend>
             <div class="chat-box" id="chat-display">
-                <div class="msg-bot" id="txt-bot-welcome">[ROBOT SYSTEM]: Núcleo en espera. Escribe 'report' o 'reporte' para auditar la trayectoria.</div>
+                <div class="msg-bot" id="txt-bot-welcome"></div>
             </div>
-            <input type="text" id="chat-input" placeholder="Escribe un comando o 'report'..." style="width: 95%; margin-bottom: 8px;">
-            <button id="btn-send-tasker" onclick="sendTaskerCommand()" style="width: 100%; font-size: 0.75rem; color: var(--neon-green); border-color: var(--neon-green);">Transmitir Comando al Robot</button>
+            <input type="text" id="chat-input" placeholder="">
+            <button id="btn-send-tasker" onclick="sendTaskerCommand()">Transmitir Comando al Robot</button>
         </fieldset>
 
         <div class="divider">
-            <button id="btn-logout" onclick="location.reload()" style="border-color: #ff0055; color: #fff; background: rgba(255,0,85,0.05); width: 100%;">CERRAR SESIÓN DEL MAIN SERVER</button>
+            <button id="btn-logout" onclick="location.reload()">CERRAR SESIÓN DEL MAIN SERVER</button>
         </div>
     </div>
 
     <script>
         let currentIA = "BETH";
-        let userLat = "25.9864", userLon = "-80.1347";
+        let userLat = "", userLon = "";
+        let hardwareVerified = false;
 
-        // Diccionario Maestro Global para cambiar absolutamente TODO el programa
+        // DICCIONARIO MAESTRO ABSOLUTO
         const globalDictionary = {
             es: {
-                gateTitle: "US SS :: SECURITY CORE",
+                telemetryLoading: "[📡 SOLICITANDO ENLACE SATELITAL...]",
+                telemetrySuccess: "🟢 DISPOSITIVO AUTORIZADO - HARDWARE EN ENLACE",
+                telemetryError: "🚨 DISPOSITIVO BLOQUEADO: PERMISOS REQUERIDOS",
+                optBeth: "BETH OS (Núcleo Femenino Prototipo)",
+                optAl: "AL OS (Masculino Prototipo)",
                 passPlaceholder: "INGRESAR MASTER KEY",
                 btnLogin: "[ INICIAR SESIÓN / CONNECT MASTER ]",
                 subTitle: "[MÓDULO DE REGISTRO DE SOCIOS COMERCIALES]",
                 scraperDesc: "Convergence & Quantum Scrapers Active (Anti-VPN Location Verification)",
+                cId: "ID / Identificación Legal",
+                cMail: "Correo Electrónico",
+                cPhone: "Número de Teléfono",
+                cTax: "SSN / EIN / Registro Fiscal",
+                optUs: "United States (Socio Fundador)",
+                optMx: "México (Socio Estratégico)",
+                optBr: "Brasil (Socio LATAM Hub)",
+                optRu: "Rusia (Socio Tecnológico Quantum)",
+                optCn: "China (Socio de Infraestructura)",
                 btnSubscribe: "Suscribirse al Sistema Global",
                 adminSubtitle: "⚡ ENTORNO DE SUPERVISIÓN SUPREMA - OPERANDO EN PRIVADO",
+                telemetryCard: "<span style='color: #00f0ff; font-weight: bold;'>// TELEMETRÍA GLOBAL QUANTUM INTEGRADA</span><br>• Instancias de Clientes: Conectadas de forma remota a sub-servidores sandbox aislados.<br>• Scrapers Activos: Analizando intención, propósito, audio, StreetView API y tracking satelital.<br>• Telegram API Core: KARO_OS_ROBOT enlazado y monitoreando trayectoria.",
                 botWelcome: "[ROBOT SYSTEM]: Núcleo en espera. Escribe 'report' o 'reporte' para auditar la trayectoria.",
                 chatPlaceholder: "Escribe un comando o 'report'...",
                 btnSendTasker: "Transmitir Comando al Robot",
                 btnLogout: "CERRAR SESIÓN DEL MAIN SERVER",
-                reportResponse: "[KARO OS ROBOT]: 📊 REPORTE DE TRAYECTORIA MULTILINGÜE:\n- Servidor Central: Main Raíz Protegido\n- API Telegram: Active Core Sincronizado\n- Scrapers de Convergencia: Monitoreando Ubicación Real sin VPN\n- Droid Legal Hub: DMV Sandbox enlazado para piezas de reemplazo y herramientas."
+                reportResponse: "[KARO OS ROBOT]: 📊 REPORTE DE TRAYECTORIA GENERAL:\n- Servidor Central: Main Raíz Protegido e Invisible\n- API Telegram Core: Active Sincronizado\n- Scrapers de Convergencia: Mapeando Ubicación Real sin VPN\n- Droid Legal Hub: DMV Sandbox enlazado para piezas de reemplazo y herramientas modulares."
             },
             en: {
-                gateTitle: "US SS :: SECURITY CORE",
+                telemetryLoading: "[📡 REQUESTING SATELLITE LINK...]",
+                telemetrySuccess: "🟢 AUTHORIZED DEVICE - HARDWARE LINKED",
+                telemetryError: "🚨 DEVICE LOCKED: PERMISSIONS REQUIRED",
+                optBeth: "BETH OS (Prototype Female Core)",
+                optAl: "AL OS (Prototype Male Core)",
                 passPlaceholder: "ENTER MASTER KEY CONTROL",
                 btnLogin: "[ SIGN IN / CONNECT MASTER ]",
                 subTitle: "[BUSINESS PARTNER REGISTRATION MODULE]",
                 scraperDesc: "Convergence & Quantum Scrapers Active (Anti-VPN Location Verification)",
+                cId: "ID / Legal Identification",
+                cMail: "Email Address",
+                cPhone: "Phone Number",
+                cTax: "SSN / EIN / Tax Registration",
+                optUs: "United States (Founding Partner)",
+                optMx: "Mexico (Strategic Partner)",
+                optBr: "Brazil (LATAM Hub Partner)",
+                optRu: "Russia (Quantum Tech Partner)",
+                optCn: "China (Infrastructure Partner)",
                 btnSubscribe: "Subscribe to Global System",
                 adminSubtitle: "⚡ SUPREME SUPERVISION ENVIRONMENT - OPERATING IN PRIVATE",
+                telemetryCard: "<span style='color: #00f0ff; font-weight: bold;'>// INTEGRATED GLOBAL QUANTUM TELEMETRY</span><br>• Client Instances: Remotely connected to isolated sandbox sub-servers.<br>• Active Scrapers: Analyzing intent, purpose, audio, StreetView API and satellite tracking.<br>• Telegram API Core: KARO_OS_ROBOT linked and monitoring trajectory.",
                 botWelcome: "[ROBOT SYSTEM]: Core standby. Type 'report' to audit system trajectory.",
                 chatPlaceholder: "Type a command or 'report'...",
                 btnSendTasker: "Transmit Command to Robot",
                 btnLogout: "LOGOUT FROM MAIN SERVER",
-                reportResponse: "[KARO OS ROBOT]: 📊 MULTILINGUAL TRAJECTORY REPORT:\n- Central Server: Main Root Secured\n- Telegram API: Active Synced Core\n- Convergence Scrapers: Monitoring Real Location without VPN\n- Droid Legal Hub: DMV Sandbox provisioned for modular replacement parts and tools."
+                reportResponse: "[KARO OS ROBOT]: 📊 GENERAL TRAJECTORY REPORT:\n- Central Server: Main Root Secured & Invisible\n- Telegram API Core: Active Synced Engine\n- Convergence Scrapers: Mapping Real Location without VPN\n- Droid Legal Hub: DMV Sandbox provisioned for modular replacement parts and tools."
             }
         };
 
@@ -221,28 +249,52 @@
                 const pos = await new Promise((res, rej) => navigator.geolocation.getCurrentPosition(res, rej, {enableHighAccuracy: true}));
                 userLat = pos.coords.latitude; userLon = pos.coords.longitude;
                 await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
+                
+                hardwareVerified = true;
                 changeGlobalLanguage();
             } catch (e) {
                 document.getElementById('telemetry-status').style.color = "#ff0055";
-                document.getElementById('telemetry-status').innerText = "🚨 DISPOSITIVO BLOQUEADO: PERMISOS REQUERIDOS";
+                document.getElementById('telemetry-status').innerText = globalDictionary['es'].telemetryError;
             }
         }
 
-        // FUNCIÓN MAESTRA QUE TRADUCE ABSOLUTAMENTE TODO AL INSTANTE
+        // TRADUCCIÓN RADICAL DE ABSOLUTAMENTE TODO EL SERVER AL INSTANTE
         function changeGlobalLanguage() {
             const lang = document.getElementById('lang-selector').value;
             const t = globalDictionary[lang];
 
-            // Traducir Compuerta de Entrada
-            document.getElementById('gate-title').innerText = t.gateTitle;
+            // 1. Telemetría y Estado
+            if(hardwareVerified) {
+                document.getElementById('telemetry-status').style.color = "var(--neon-green)";
+                document.getElementById('telemetry-status').innerText = t.telemetrySuccess;
+            } else {
+                document.getElementById('telemetry-status').innerText = t.telemetryLoading;
+            }
+
+            // 2. Elementos del Login Admin (Opciones internas traducidas)
+            document.getElementById('opt-beth').innerText = t.optBeth;
+            document.getElementById('opt-al').innerText = t.optAl;
             document.getElementById('master-pass').placeholder = t.passPlaceholder;
             document.getElementById('btn-login').innerText = t.btnLogin;
+
+            // 3. Formulario de Clientes e Inputs Dinámicos
             document.getElementById('lbl-sub-title').innerText = t.subTitle;
             document.getElementById('lbl-scraper-desc').innerText = t.scraperDesc;
+            document.getElementById('c-id').placeholder = t.cId;
+            document.getElementById('c-mail').placeholder = t.cMail;
+            document.getElementById('c-phone').placeholder = t.cPhone;
+            document.getElementById('c-tax').placeholder = t.cTax;
+            
+            document.getElementById('opt-us').innerText = t.optUs;
+            document.getElementById('opt-mx').innerText = t.optMx;
+            document.getElementById('opt-br').innerText = t.optBr;
+            document.getElementById('opt-ru').innerText = t.optRu;
+            document.getElementById('opt-cn').innerText = t.optCn;
             document.getElementById('btn-subscribe').innerText = t.btnSubscribe;
 
-            // Traducir Servidor Interno
+            // 4. Panel Interno del Servidor Central
             document.getElementById('txt-admin-subtitle').innerText = t.adminSubtitle;
+            document.getElementById('txt-telemetry-card').innerHTML = t.telemetryCard;
             document.getElementById('txt-bot-welcome').innerText = t.botWelcome;
             document.getElementById('chat-input').placeholder = t.chatPlaceholder;
             document.getElementById('btn-send-tasker').innerText = t.btnSendTasker;
@@ -266,8 +318,7 @@
         function registerClient(e) {
             e.preventDefault();
             const country = document.getElementById('c-country').value;
-            alert(`[CONVERGENCE SCRAPER]: Rompiendo VPN... Ubicación real verificada en país socio: [${country}].\n\n[MAIN SERVER]: Despachando cliente de forma segura a sub-servidor Sandbox remoto conectado al Main.`);
-            alert("Suscripción Procesada de manera Exitosa.");
+            alert(`[CONVERGENCE REAL TIME]: VPN Bypassed. Location validated in: [${country}].\nRedirecting client to isolated Sandbox Sub-server.`);
             location.reload();
         }
 
@@ -284,7 +335,7 @@
                 if(cmd === 'report' || cmd === 'reporte') {
                     display.innerHTML += `<div class="msg-bot">${globalDictionary[lang].reportResponse.replace(/\n/g, '<br>')}</div>`;
                 } else {
-                    display.innerHTML += `<div class="msg-bot">[${currentIA} OS]: Leyendo intención y mapeando hilos cuánticos del robot...</div>`;
+                    display.innerHTML += `<div class="msg-bot">[${currentIA} OS]: Parsing intent and reading telemetry streaming data...</div>`;
                 }
                 display.scrollTop = display.scrollHeight;
             }, 300);
